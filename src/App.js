@@ -1,10 +1,11 @@
 import './App.css';
-import PersistentDrawerLeft from './components/Drawer';
+import MainLayout from './components/MainLayout';
+import Sample from './pages/sample';
 
 function App() {
   return (
     <div className='App'>
-      <PersistentDrawerLeft/>
+      <Sample/>
     </div>
   );
 }
