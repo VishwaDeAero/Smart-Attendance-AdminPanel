@@ -1,12 +1,13 @@
-import { Analytics, ChevronLeft, ChevronRight, Inbox, Logout, Mail, People, Public, School } from '@mui/icons-material';
+import { Analytics, ChevronLeft, ChevronRight, Logout, People, Public, School } from '@mui/icons-material'
 import { Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, styled, useTheme } from '@mui/material'
-import React, { useState } from 'react'
-import AppLogo from './AppLogo';
+import React from 'react'
+import AppLogo from './AppLogo'
+import { Link, useLocation } from 'react-router-dom'
 
 const SideDrawer = ({ drawerWidth, open, handleDrawerClose }) => {
 
-  const theme = useTheme();
-  const [selectedPage, setSelectedPage] = useState('Inbox');
+  const theme = useTheme()
+  const location = useLocation()
 
   // Styles for the side drawer header component.
   const DrawerHeader = styled('div')(({ theme }) => ({
@@ -16,38 +17,32 @@ const SideDrawer = ({ drawerWidth, open, handleDrawerClose }) => {
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
     justifyContent: 'space-between',
-  }));
+  }))
 
   // Side Drawer Content
   const mainItems = [
-    { text: 'Dashboard', icon: <Analytics/> },
-    { text: 'Students', icon: <People/> },
-    { text: 'Lectures', icon: <School/> },
-    { text: 'Subjects', icon: <Public/> },
-  ];
+    { text: 'Dashboard', route:'/', icon: <Analytics/> },
+    { text: 'Students', route:'/test', icon: <People/> },
+    { text: 'Lectures', route:'/lectures', icon: <School/> },
+    { text: 'Subjects', route:'/subjects', icon: <Public/> },
+  ]
 
   const userItemms = [
     { text: 'Logout', icon: <Logout/> },
-  ];
-
-
-  // Handle Side Bar Item Click
-  const handleListItemClick = (text) => {
-    setSelectedPage(text);
-    // You can add any additional logic here when a page is selected
-  };
+  ]
 
   // Side Bar Components Generator
   const renderListItems = (items) => (
     <List>
-      {items.map(({ text, icon }, index) => (
+      {items.map(({ text, route, icon }, index) => (
         <ListItem
           key={text}
           disablePadding
-          onClick={() => handleListItemClick(text)}
         >
           <ListItemButton
-            selected={selectedPage === text}
+            selected={location.pathname === route}
+            component={Link}
+            to={route}
           >
             <ListItemIcon>
               {icon}
@@ -57,7 +52,7 @@ const SideDrawer = ({ drawerWidth, open, handleDrawerClose }) => {
         </ListItem>
       ))}
     </List>
-  );
+  )
 
   return (
     <Drawer
