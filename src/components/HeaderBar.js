@@ -4,7 +4,7 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import { AppBar, Badge, Menu, MenuItem } from '@mui/material';
-import { AccountCircle, MoreVert, Notifications } from '@mui/icons-material';
+import { AccountCircle, Mail, MoreVert, Notifications } from '@mui/icons-material';
 
 const HeaderBar = ({ drawerWidth, open, setOpen }) => {
 
