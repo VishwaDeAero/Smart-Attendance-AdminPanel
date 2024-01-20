@@ -1,15 +1,18 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
-import Toolbar from '@mui/material/Toolbar';
-import SideDrawer from './SideDrawer';
-import { styled } from '@mui/material';
-import HeaderBar from './HeaderBar';
+import Box from '@mui/material/Box'
+import CssBaseline from '@mui/material/CssBaseline'
+import Toolbar from '@mui/material/Toolbar'
+import SideDrawer from './SideDrawer'
+import { styled } from '@mui/material'
+import HeaderBar from './HeaderBar'
+import Breadcrumb from './Breadcrumb';
+import { grey } from '@mui/material/colors';
 
 const drawerWidth = 240;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
     ({ theme, open }) => ({
+        backgroundColor: grey[50],
         flexGrow: 1,
         padding: theme.spacing(3),
         transition: theme.transitions.create('margin', {
@@ -26,7 +29,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
     }),
 );
 
-export default function MainLayout({children}) {
+export default function MainLayout({ children }) {
 
     const [open, setOpen] = React.useState(true);
 
@@ -34,13 +37,15 @@ export default function MainLayout({children}) {
         setOpen(false);
     };
 
+
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
-            <HeaderBar drawerWidth={drawerWidth} open={open} setOpen={setOpen}/>
+            <HeaderBar drawerWidth={drawerWidth} open={open} setOpen={setOpen} />
             <SideDrawer drawerWidth={drawerWidth} open={open} handleDrawerClose={handleDrawerClose} />
             <Main open={open}>
                 <Toolbar /> {/* Do not delete, this keeps the gap from top */}
+                    <Breadcrumb/>
                 {children}
             </Main>
         </Box>
