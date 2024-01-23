@@ -3,7 +3,8 @@ import MainLayout from '../../components/MainLayout'
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
 import { Box, Button, Divider, IconButton, Switch, Typography } from '@mui/material'
 import { Add, Delete, Edit } from '@mui/icons-material'
-import { DataGrid } from '@mui/x-data-grid'
+import DataTable from '../../components/DataTable'
+import { Link } from 'react-router-dom'
 
 const columns = [
     {
@@ -36,11 +37,11 @@ const columns = [
         flex: 1,
         renderCell: (params) => (
             <Switch
-              checked={params.row.status === 1}
-            //   onChange={() => handleStatusToggle(params.row.id)}
-              inputProps={{ 'aria-label': 'controlled' }}
+                checked={params.row.status === 1}
+                //   onChange={() => handleStatusToggle(params.row.id)}
+                inputProps={{ 'aria-label': 'controlled' }}
             />
-          ),
+        ),
     },
     {
         field: 'updatedAt',
@@ -57,20 +58,20 @@ const columns = [
         align: 'center',
         renderCell: (params) => (
             <div>
-              <IconButton color='warning'>
-                <Edit/>
-              </IconButton>
-              <IconButton color='error'>
-                <Delete />
-              </IconButton>
+                <IconButton color='warning'>
+                    <Edit />
+                </IconButton>
+                <IconButton color='error'>
+                    <Delete />
+                </IconButton>
             </div>
-          ),
+        ),
     },
 ];
 
 const rows = [
-    { id: 1, name: 'Jon Snow', username: 'JonSnow22', email: 'JonSnow22@gmail.com', status:1, updatedAt:'12:00:00 12/12/2023', actions:'edit delete buttons', },
-    { id: 2, name: 'Jon Snow', username: 'JonSnow22', email: 'JonSnow22@gmail.com', status:0, updatedAt:'12:00:00 12/12/2023', actions:'edit delete buttons', },
+    { id: 1, name: 'Jon Snow', username: 'JonSnow22', email: 'JonSnow22@gmail.com', status: 1, updatedAt: '12:00:00 12/12/2023', actions: 'edit delete buttons', },
+    { id: 2, name: 'Jon Snow', username: 'JonSnow22', email: 'JonSnow22@gmail.com', status: 0, updatedAt: '12:00:00 12/12/2023', actions: 'edit delete buttons', },
 ];
 
 const UserView = () => {
@@ -83,22 +84,16 @@ const UserView = () => {
                 <Grid2 xs={12} md={4} sx={{
                     textAlign: 'end'
                 }}>
-                    <Button variant="contained" endIcon={<Add />}>
+                    <Button component={Link} to="/users/create" variant="contained" endIcon={<Add />}>
                         New User
                     </Button>
                 </Grid2>
             </Grid2>
             <Divider sx={{ my: 3 }} />
             <Box padding={2}>
-                <DataGrid
+                <DataTable
                     rows={rows}
                     columns={columns}
-                    initialState={{
-                        pagination: {
-                            paginationModel: { page: 0, pageSize: 6 },
-                        },
-                    }}
-                    pageSizeOptions={[5, 10]}
                 />
             </Box>
         </MainLayout>

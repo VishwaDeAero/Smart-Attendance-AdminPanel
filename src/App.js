@@ -4,7 +4,7 @@ import Sample from './pages/sample'
 import Test from './pages/test'
 import PageNotFound from './pages/pageNotFound'
 import SignIn from './pages/signIn'
-import UserView from './pages/user/userView'
+import UserRoute from './routes/UserRoute'
 
 function App() {
   return (
@@ -15,10 +15,7 @@ function App() {
         {/* Login Page */}
         <Route path="/login" exact element={<SignIn />} />
         {/* Users Routes */}
-        <Route path="/users" element={<UserView/>}>
-          {/* <Route path="create" element={<CreateUser />} /> */}
-          {/* <Route path="edit/:id" element={<EditUser />} /> */}
-        </Route>
+        <Route path="/users/*" element={<UserRoute />} />
         <Route path="/test" exact element={<Test />} />
         {/* 404 Page */}
         <Route path="*" exact element={<PageNotFound />} />

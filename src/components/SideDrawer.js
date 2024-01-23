@@ -1,13 +1,12 @@
 import { AccountCircle, Analytics, ChevronLeft, ChevronRight, Logout, People, Public, School } from '@mui/icons-material'
-import { Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, styled, useTheme } from '@mui/material'
+import { Divider, Drawer, IconButton, styled, useTheme } from '@mui/material'
 import React from 'react'
 import AppLogo from './AppLogo'
-import { Link, useLocation } from 'react-router-dom'
+import ListItemRender from './ListItemRender'
 
 const SideDrawer = ({ drawerWidth, open, handleDrawerClose }) => {
 
   const theme = useTheme()
-  const location = useLocation()
 
   // Styles for the side drawer header component.
   const DrawerHeader = styled('div')(({ theme }) => ({
@@ -21,39 +20,16 @@ const SideDrawer = ({ drawerWidth, open, handleDrawerClose }) => {
 
   // Side Drawer Content
   const mainItems = [
-    { text: 'Dashboard', route:'/', icon: <Analytics/> },
-    { text: 'Students', route:'/test', icon: <People/> },
-    { text: 'Users', route:'/users', icon: <AccountCircle/> },
-    { text: 'Lectures', route:'/lectures', icon: <School/> },
-    { text: 'Subjects', route:'/subjects', icon: <Public/> },
+    { text: 'Dashboard', route: '/', icon: <Analytics /> },
+    { text: 'Students', route: '/test', icon: <People /> },
+    { text: 'Users', route: '/users', icon: <AccountCircle /> },
+    { text: 'Lectures', route: '/lectures', icon: <School /> },
+    { text: 'Subjects', route: '/subjects', icon: <Public /> },
   ]
 
   const userItemms = [
-    { text: 'Logout', icon: <Logout/> },
+    { text: 'Logout', icon: <Logout /> },
   ]
-
-  // Side Bar Components Generator
-  const renderListItems = (items) => (
-    <List>
-      {items.map(({ text, route, icon }, index) => (
-        <ListItem
-          key={text}
-          disablePadding
-        >
-          <ListItemButton
-            selected={location.pathname === route}
-            component={Link}
-            to={route}
-          >
-            <ListItemIcon>
-              {icon}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItemButton>
-        </ListItem>
-      ))}
-    </List>
-  )
 
   return (
     <Drawer
@@ -76,9 +52,9 @@ const SideDrawer = ({ drawerWidth, open, handleDrawerClose }) => {
         </IconButton>
       </DrawerHeader>
       <Divider />
-      {renderListItems(mainItems)}
+      <ListItemRender items={mainItems} />
       <Divider />
-      {renderListItems(userItemms)}
+      <ListItemRender items={userItemms} />
     </Drawer>
   )
 }
