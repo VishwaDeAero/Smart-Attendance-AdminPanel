@@ -25,8 +25,6 @@ function Copyright(props) {
     )
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
-
 const defaultTheme = createTheme()
 
 export default function SignIn() {
@@ -41,21 +39,40 @@ export default function SignIn() {
 
     return (
         <ThemeProvider theme={defaultTheme}>
-            <Container component="main" maxWidth="xs">
+            <Container
+                component="main"
+                maxWidth={false}
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '100vh',
+                    background: 'linear-gradient(45deg, rgba(33, 150, 243, 0.2) 30%, rgba(103, 58, 183, 0.2) 90%)',
+                }}
+            >
                 <CssBaseline />
                 <Box
                     sx={{
-                        marginTop: 8,
+                        width: '500px',
+                        backgroundColor: 'rgba(255, 255, 255, 0.4)',
+                        padding: 5,
+                        borderRadius: '15px',
+                        boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px',
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
                     }}
                 >
-                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                    <img
+                            src="/assets/logos/header-logo.svg" // replace with the actual path to your logo image
+                            alt="Logo"
+                            style={{ width: '10rem', height: 'auto', marginBottom: 8 }} // adjust the size as needed
+                        />
+                    {/* <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
                         <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Sign in
+                    </Avatar> */}
+                    <Typography component="h1" variant="h5" color="primary"  style={{ fontWeight: 'bold'}}>
+                        Sign In
                     </Typography>
                     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                         <TextField
@@ -90,7 +107,7 @@ export default function SignIn() {
                         >
                             Sign In
                         </Button>
-                        <Copyright sx={{ mt: 3, mb: 4 }} />
+                        <Copyright/>
                     </Box>
                 </Box>
             </Container>

@@ -1,43 +1,43 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import { AppBar, Badge, Menu, MenuItem } from '@mui/material';
-import { AccountCircle, Mail, MoreVert, Notifications } from '@mui/icons-material';
+import * as React from 'react'
+import Box from '@mui/material/Box'
+import Toolbar from '@mui/material/Toolbar'
+import IconButton from '@mui/material/IconButton'
+import MenuIcon from '@mui/icons-material/Menu'
+import { AppBar, Badge, Menu, MenuItem } from '@mui/material'
+import { AccountCircle, MoreVert, Notifications } from '@mui/icons-material'
 
 const HeaderBar = ({ drawerWidth, open, setOpen }) => {
 
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+    const [anchorEl, setAnchorEl] = React.useState(null)
+    const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null)
 
-    const isMenuOpen = Boolean(anchorEl);
-    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+    const isMenuOpen = Boolean(anchorEl)
+    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl)
 
-    const menuId = 'primary-account-menu';
-    const mobileMenuId = 'primary-account-menu-mobile';
+    const menuId = 'primary-account-menu'
+    const mobileMenuId = 'primary-account-menu-mobile'
 
     const handleProfileMenuOpen = (event) => {
         console.log(event)
-        setAnchorEl(event.target);
-    };
+        setAnchorEl(event.target)
+    }
 
     const handleMobileMenuClose = () => {
-        setMobileMoreAnchorEl(null);
-    };
+        setMobileMoreAnchorEl(null)
+    }
 
     const handleMenuClose = () => {
-        setAnchorEl(null);
-        handleMobileMenuClose();
-    };
+        setAnchorEl(null)
+        handleMobileMenuClose()
+    }
 
     const handleMobileMenuOpen = (event) => {
-        setMobileMoreAnchorEl(event.currentTarget);
-    };
+        setMobileMoreAnchorEl(event.currentTarget)
+    }
 
     const handleDrawerOpen = () => {
-        setOpen(true);
-    };
+        setOpen(true)
+    }
 
     const renderMenu = (
         <Menu
@@ -58,7 +58,7 @@ const HeaderBar = ({ drawerWidth, open, setOpen }) => {
             <MenuItem onClick={handleMenuClose}>My Account</MenuItem>
             <MenuItem onClick={handleMenuClose}>Log Out</MenuItem>
         </Menu>
-    );
+    )
 
     const renderMobileMenu = (
         <Menu
@@ -101,7 +101,7 @@ const HeaderBar = ({ drawerWidth, open, setOpen }) => {
                 <p>Profile</p>
             </MenuItem>
         </Menu>
-    );
+    )
     return (
         <>
             <AppBar position="fixed" open={open}>
