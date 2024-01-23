@@ -43,7 +43,7 @@ const UserForm = ({ initialValues, onSubmit }) => {
                             id="name"
                             name="name"
                             label="Name"
-                            defaultValue={formData.name}
+                            value={formData.name}
                             onChange={handleChange}
                             variant="outlined"
                             required
@@ -89,9 +89,9 @@ const UserForm = ({ initialValues, onSubmit }) => {
                             variant="outlined"
                             required
                         >
-                            <MenuItem value="option1">Admin</MenuItem>
-                            <MenuItem value="option2">Moderator</MenuItem>
-                            <MenuItem value="option3">Lecturer</MenuItem>
+                            <MenuItem value="admin">Admin</MenuItem>
+                            <MenuItem value="moderator">Moderator</MenuItem>
+                            <MenuItem value="lecturer">Lecturer</MenuItem>
                         </Select>
                     </FormControl>
                 </Grid2>

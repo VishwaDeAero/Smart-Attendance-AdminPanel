@@ -58,7 +58,7 @@ const columns = [
         align: 'center',
         renderCell: (params) => (
             <div>
-                <IconButton color='warning'>
+                <IconButton component={Link} to={`update/${params.row.id}`} color='warning'>
                     <Edit />
                 </IconButton>
                 <IconButton color='error'>
