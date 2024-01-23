@@ -5,11 +5,11 @@ import { Breadcrumbs, Container, Link } from '@mui/material'
 
 const Breadcrumb = () => {
 
-    const location = useLocation();
+    const location = useLocation()
 
     const capitalizeFirstLetter = (string) => {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-    };
+        return string.charAt(0).toUpperCase() + string.slice(1)
+    }
 
     return (
         <Container disableGutters={true} sx={{
@@ -23,7 +23,7 @@ const Breadcrumb = () => {
                     Home
                 </Link>
                 {location.pathname.split('/').filter(Boolean).map((segment, index, array) => {
-                    const url = `/${array.join('/')}`;
+                    const url = `/${array.join('/')}`
                     return <Link
                         underline='hover'
                         key={url}
