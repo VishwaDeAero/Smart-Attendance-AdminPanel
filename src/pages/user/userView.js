@@ -5,6 +5,7 @@ import { Box, Button, Divider, IconButton, Switch, Typography } from '@mui/mater
 import { Add, Delete, Edit } from '@mui/icons-material'
 import DataTable from '../../components/DataTable'
 import { Link } from 'react-router-dom'
+import showAlert from '../../utils/swal'
 
 const columns = [
     {
@@ -61,7 +62,10 @@ const columns = [
                 <IconButton component={Link} to={`update/${params.row.id}`} color='warning'>
                     <Edit />
                 </IconButton>
-                <IconButton color='error'>
+                <IconButton color='error' onClick={(e) => {
+                    e.stopPropagation()
+                    showAlert("Are You Sure?", "You want to  delete this user!", "warning", true, "Yes", ()=>{console.log("Deleting user id:"+params.row.id)})
+                }}>
                     <Delete />
                 </IconButton>
             </div>
