@@ -12,9 +12,24 @@ const showAlert = (title, text, icon, showCancelButton, confirmButtonText, onCon
         confirmButtonText: confirmButtonText ? confirmButtonText : "Ok",
     }).then((result) => {
         if (result.isConfirmed) {
-            onConfirm();
+            onConfirm()
         }
     })
 }
 
-export default showAlert
+const showLoading = () => {
+    withReactContent(Swal).fire({
+        title: 'Loading',
+        allowOutsideClick: false,
+        onBeforeOpen: () => {
+            Swal.showLoading()
+        },
+    })
+}
+
+const closeAlert = () => {
+    withReactContent(Swal).close()
+}
+
+// export default showAlert
+export { showAlert, showLoading, closeAlert }
