@@ -7,7 +7,7 @@ import moment from 'moment';
 import DataTable from '../../components/DataTable'
 import { Link } from 'react-router-dom'
 import { showAlert, showLoading, closeAlert } from '../../utils/swal'
-import { getAllUsers, updateUser } from '../../services/userService'
+import { deleteUser, getAllUsers, updateUser } from '../../services/userService'
 
 const UserView = () => {
 
@@ -81,7 +81,7 @@ const UserView = () => {
                     </IconButton>
                     <IconButton color='error' onClick={(e) => {
                         e.stopPropagation()
-                        showAlert("Are You Sure?", "You want to  delete this user!", "warning", true, "Yes", () => { console.log("Deleting user id:" + params.row.id) })
+                        handleDeleteUser(params.row.id)
                     }}>
                         <Delete />
                     </IconButton>
@@ -100,6 +100,28 @@ const UserView = () => {
             console.error('Error fetching users:', error)
         }
         closeAlert()
+    }
+
+    const handleDeleteUser = async (id) => {
+        showAlert(
+            "Are You Sure?",
+            "You want to  delete this user!",
+            "warning",
+            true,
+            "Yes",
+            async () => {
+                showLoading()
+                try {
+                    const usersData = await deleteUser(id)
+                    console.log(usersData)
+                    fetchUsers()
+                    showAlert("User Deleted", `user id:${id} deleted successfully.`, "success")
+                } catch (error) {
+                    console.error('Error user delete:', error)
+                    showAlert("Delete User Failed", error, "error")
+                }
+            }
+        )
     }
 
     const handleStatusToggle = async (id, status) => {
