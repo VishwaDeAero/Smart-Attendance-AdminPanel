@@ -3,6 +3,7 @@ import MainLayout from '../../components/MainLayout'
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
 import { Box, Button, Divider, IconButton, Switch, Typography } from '@mui/material'
 import { Add, Delete, Edit } from '@mui/icons-material'
+import moment from 'moment';
 import DataTable from '../../components/DataTable'
 import { Link } from 'react-router-dom'
 import { showAlert, showLoading, closeAlert } from '../../utils/swal'
@@ -13,6 +14,7 @@ const UserView = () => {
     const [users, setUsers] = useState([])
 
     useEffect(() => {
+        showLoading()
         fetchUsers()
     }, [])
 
@@ -48,7 +50,10 @@ const UserView = () => {
             renderCell: (params) => (
                 <Switch
                     checked={params.row.status === 1}
-                    onChange={(e) => handleStatusToggle(params.row.id, e.target.checked)}
+                    onChange={(e) => {
+                        showLoading()
+                        handleStatusToggle(params.row.id, e.target.checked)
+                    }}
                     inputProps={{ 'aria-label': 'controlled' }}
                 />
             ),
@@ -56,7 +61,10 @@ const UserView = () => {
         {
             field: 'updatedAt',
             headerName: 'Last Modified',
-            flex: 2
+            flex: 2,
+            renderCell: (params) => (
+                <>{moment(params.value).format('YYYY/MM/DD HH:mm')}</>
+            ),
         },
         {
             field: 'actions',
@@ -85,11 +93,13 @@ const UserView = () => {
     const fetchUsers = async () => {
         try {
             const usersData = await getAllUsers()
-            console.log(usersData)
-            setUsers(usersData.data)
+            if (usersData?.data) {
+                setUsers(usersData.data)
+            }
         } catch (error) {
             console.error('Error fetching users:', error)
         }
+        closeAlert()
     }
 
     const handleStatusToggle = async (id, status) => {
@@ -99,6 +109,7 @@ const UserView = () => {
             fetchUsers()
         } catch (error) {
             console.error('Error user status change:', error)
+            closeAlert()
         }
     }
 

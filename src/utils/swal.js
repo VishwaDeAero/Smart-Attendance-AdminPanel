@@ -6,13 +6,15 @@ const showAlert = (title, text, icon, showCancelButton, confirmButtonText, onCon
         title: title,
         text: text,
         icon: icon ? icon : 'success',
-        showCancelButton: showCancelButton ? showCancelButton : true,
+        showCancelButton: showCancelButton ? showCancelButton : false,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
         confirmButtonText: confirmButtonText ? confirmButtonText : "Ok",
     }).then((result) => {
         if (result.isConfirmed) {
-            onConfirm()
+            if(onConfirm){
+                onConfirm()
+            }
         }
     })
 }
@@ -21,7 +23,7 @@ const showLoading = () => {
     withReactContent(Swal).fire({
         title: 'Loading',
         allowOutsideClick: false,
-        onBeforeOpen: () => {
+        didOpen: () => {
             Swal.showLoading()
         },
     })
