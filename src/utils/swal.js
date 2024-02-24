@@ -4,7 +4,7 @@ import withReactContent from 'sweetalert2-react-content'
 const showAlert = (title, text, icon, showCancelButton, confirmButtonText, onConfirm) => {
     withReactContent(Swal).fire({
         title: title,
-        text: text,
+        html: text,
         icon: icon ? icon : 'success',
         showCancelButton: showCancelButton ? showCancelButton : false,
         confirmButtonColor: "#3085d6",
