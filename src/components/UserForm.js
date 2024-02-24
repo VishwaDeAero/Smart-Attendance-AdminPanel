@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react'
 
 const UserForm = ({ initialValues, onSubmit }) => {
     const [formData, setFormData] = useState({
+        id: null,
         name: '',
         username: '',
         email: '',
@@ -31,7 +32,7 @@ const UserForm = ({ initialValues, onSubmit }) => {
     const handleSubmit = (event) => {
         event.preventDefault()
         // Call the onSubmit function with the form data
-        onSubmit(formData)
+        formData.id? onSubmit(formData.id,formData): onSubmit(formData)
     }
 
     return (
@@ -76,7 +77,7 @@ const UserForm = ({ initialValues, onSubmit }) => {
                         />
                     </FormControl>
                 </Grid2>
-                <Grid2 xs={12} md={6}>
+                {/* <Grid2 xs={12} md={6}>
                     <FormControl fullWidth>
                         <InputLabel id="role-label">User Role</InputLabel>
                         <Select
@@ -94,7 +95,7 @@ const UserForm = ({ initialValues, onSubmit }) => {
                             <MenuItem value="lecturer">Lecturer</MenuItem>
                         </Select>
                     </FormControl>
-                </Grid2>
+                </Grid2> */}
                 <Grid2 xs={12}>
                     <Divider sx={{ my: 1 }} />
                 </Grid2>
@@ -105,7 +106,7 @@ const UserForm = ({ initialValues, onSubmit }) => {
                             name="password"
                             label="Password"
                             type={showPassword ? 'text' : 'password'}
-                            value={formData.password}
+                            // value={formData.password}
                             onChange={handleChange}
                             variant="outlined"
                             InputProps={{
@@ -132,7 +133,7 @@ const UserForm = ({ initialValues, onSubmit }) => {
                             name="confirm_password"
                             label="Re-Enter Password"
                             type={showPassword ? 'text' : 'password'}
-                            value={formData.confirm_password}
+                            // value={formData.confirm_password}
                             onChange={handleChange}
                             variant="outlined"
                             InputProps={{

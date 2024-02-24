@@ -5,8 +5,23 @@ import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
 import { Box, Button, Divider, Typography } from '@mui/material'
 import { Link } from 'react-router-dom'
 import UserForm from '../../components/UserForm'
+import { createUser } from '../../services/userService'
+import { showAlert, showLoading } from '../../utils/swal'
 
 const UserCreate = () => {
+
+  const handleUserCreate = async (data) => {
+    showLoading()
+    try {
+        const userData = await createUser(data)
+        console.log(userData)
+        showAlert("New User Created",`New user created successfully.`, "success")
+    } catch (error) {
+        console.error(`Error user create:`, error)
+        showAlert("Create User Failed",error, "error")
+    }
+}
+
   return (
     <MainLayout>
       <Grid2 container spacing={2}>
@@ -23,7 +38,7 @@ const UserCreate = () => {
       </Grid2>
       <Divider sx={{ my: 3 }} />
       <Box padding={2}>
-        <UserForm />
+        <UserForm onSubmit={handleUserCreate} />
       </Box>
     </MainLayout>
   )
