@@ -22,6 +22,8 @@ function App() {
         <Route path="/subjects/*" element={<SubjectRoute />} />
         {/* Student Routes */}
         <Route path="/students/*" element={<StudentRoute />} />
+        {/* Lecture Routes */}
+        <Route path="/lectures/*" element={<LectureRoute />} />
         <Route path="/test" exact element={<Test />} />
         {/* 404 Page */}
         <Route path="*" exact element={<PageNotFound />} />
