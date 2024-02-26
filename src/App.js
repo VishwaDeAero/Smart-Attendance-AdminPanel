@@ -7,6 +7,7 @@ import SignIn from './pages/signIn'
 import UserRoute from './routes/UserRoute'
 import SubjectRoute from './routes/SubjectRoute'
 import StudentRoute from './routes/StudentRoute'
+import LectureRoute from './routes/LectureRoute'
 
 function App() {
   return (

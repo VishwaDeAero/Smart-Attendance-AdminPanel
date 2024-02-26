@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react'
 import MainLayout from '../../components/MainLayout'
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
 import { Box, Button, Divider, IconButton, Switch, Typography } from '@mui/material'
-import { Add, Delete, Edit, QrCode, QrCode2, Visibility } from '@mui/icons-material'
+import { Add, Delete, Edit, QrCode2, Visibility } from '@mui/icons-material'
 import moment from 'moment';
 import DataTable from '../../components/DataTable'
 import { Link } from 'react-router-dom'
 import { showAlert, showLoading, closeAlert } from '../../utils/swal'
-import { deleteLecture, getAllLectures, updateLecture } from '../../services/lectureService'
+import { deleteLecture, getAllLectures, getLecture, updateLecture } from '../../services/lectureService'
+import QRCode from 'qrcode.react';
 
 const LectureView = () => {
 
@@ -89,7 +90,10 @@ const LectureView = () => {
             align: 'center',
             renderCell: (params) => (
                 <div>
-                    <IconButton color='primary'>
+                    <IconButton color='primary' onClick={(e) => {
+                        e.stopPropagation()
+                        showLectureQRCode(params.row.id)
+                    }}>
                         <QrCode2 />
                     </IconButton>
                     <IconButton component={Link} to={`update/${params.row.id}`} color='warning'>
@@ -105,6 +109,24 @@ const LectureView = () => {
             ),
         },
     ]
+
+    const showLectureQRCode = async (lecture_id) => {
+        showLoading()
+        try {
+            const lecturesData = await getLecture(lecture_id)
+            if (lecturesData?.data) {
+                const  qrcodeDesign = <QRCode value={JSON.stringify(lecturesData.data)} renderAs="svg" size={256} />
+                showAlert(
+                    "Lecture QR Code",
+                    qrcodeDesign,
+                    "info"
+                )
+            }
+        } catch (error) {
+            showAlert("Lecture QR Code Failed", error, "error")
+            console.error('Error fetching lectures for QR:', error)
+        }
+    }
 
     const fetchLectures = async () => {
         try {
