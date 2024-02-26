@@ -21,7 +21,7 @@ const SideDrawer = ({ drawerWidth, open, handleDrawerClose }) => {
   // Side Drawer Content
   const mainItems = [
     { text: 'Dashboard', route: '/', icon: <Analytics /> },
-    { text: 'Students', route: '/test', icon: <People /> },
+    { text: 'Students', route: '/students', icon: <People /> },
     { text: 'Users', route: '/users', icon: <AccountCircle /> },
     { text: 'Lectures', route: '/lectures', icon: <School /> },
     { text: 'Subjects', route: '/subjects', icon: <Public /> },
