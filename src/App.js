@@ -6,6 +6,7 @@ import PageNotFound from './pages/pageNotFound'
 import SignIn from './pages/signIn'
 import UserRoute from './routes/UserRoute'
 import SubjectRoute from './routes/SubjectRoute'
+import StudentRoute from './routes/StudentRoute'
 
 function App() {
   return (
@@ -19,6 +20,8 @@ function App() {
         <Route path="/users/*" element={<UserRoute />} />
         {/* Subject Routes */}
         <Route path="/subjects/*" element={<SubjectRoute />} />
+        {/* Student Routes */}
+        <Route path="/students/*" element={<StudentRoute />} />
         <Route path="/test" exact element={<Test />} />
         {/* 404 Page */}
         <Route path="*" exact element={<PageNotFound />} />
