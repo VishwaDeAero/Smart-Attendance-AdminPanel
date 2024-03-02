@@ -29,6 +29,15 @@ export const getLecture = async (lectureId) => {
   }
 };
 
+export const getLectureQR = async (lectureId) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/qrtoken/${lectureId}`);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
 export const updateLecture = async (lectureId, updatedLectureData) => {
   try {
     const response = await axios.patch(`${BASE_URL}/${lectureId}`, updatedLectureData);

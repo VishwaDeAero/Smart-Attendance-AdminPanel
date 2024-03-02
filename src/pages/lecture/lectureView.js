@@ -3,12 +3,12 @@ import MainLayout from '../../components/MainLayout'
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
 import { Box, Button, Divider, IconButton, Switch, Typography } from '@mui/material'
 import { Add, Delete, Edit, QrCode2, Visibility } from '@mui/icons-material'
-import moment from 'moment';
+import moment from 'moment'
 import DataTable from '../../components/DataTable'
 import { Link } from 'react-router-dom'
 import { showAlert, showLoading, closeAlert } from '../../utils/swal'
-import { deleteLecture, getAllLectures, getLecture, updateLecture } from '../../services/lectureService'
-import QRCode from 'qrcode.react';
+import { deleteLecture, getAllLectures, getLecture, getLectureQR, updateLecture } from '../../services/lectureService'
+import QRCode from 'qrcode.react'
 
 const LectureView = () => {
 
@@ -38,6 +38,7 @@ const LectureView = () => {
         {
             field: 'location',
             headerName: 'Location',
+            align: 'center',
             flex: 1
         },
         {
@@ -48,6 +49,7 @@ const LectureView = () => {
         {
             field: 'duration',
             headerName: 'Duration',
+            align: 'center',
             flex: 1
         },
         {
@@ -116,9 +118,9 @@ const LectureView = () => {
     const showLectureQRCode = async (lecture_id) => {
         showLoading()
         try {
-            const lecturesData = await getLecture(lecture_id)
-            if (lecturesData?.data) {
-                const  qrcodeDesign = <QRCode value={JSON.stringify(lecturesData.data)} renderAs="svg" size={256} />
+            const qrData = await getLectureQR(lecture_id)
+            if (qrData?.data) {
+                const  qrcodeDesign = <QRCode value={JSON.stringify(qrData.data)} renderAs="svg" size={256} />
                 showAlert(
                     "Lecture QR Code",
                     qrcodeDesign,
