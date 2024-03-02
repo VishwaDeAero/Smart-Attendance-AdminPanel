@@ -1,10 +1,11 @@
-import { Visibility, VisibilityOff } from '@mui/icons-material'
-import { Button, Divider, FormControl, IconButton, InputAdornment, InputLabel, MenuItem, Select, TextField } from '@mui/material'
+import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material'
+import { getAllSubjects } from '../services/subjectService'
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 
 const LectureForm = ({ initialValues, onSubmit }) => {
+    const [subjects, setSubjects] = useState([]);
     const [formData, setFormData] = useState({
         id: null,
         subjectId: '',
@@ -21,10 +22,22 @@ const LectureForm = ({ initialValues, onSubmit }) => {
         }
     }, [initialValues])
 
+    useEffect(() => {
+        // Fetch subjects from your API
+        getAllSubjects()
+            .then(subjects => {
+                setSubjects(subjects.data);
+            })
+            .catch(error => {
+                console.error('Error fetching subjects:', error);
+            });
+    }, []);
+
     const handleChange = (event) => {
         const { name, value } = event.target
-        setFormData((prevData) => ({ ...prevData, [name]: value }))
-    }
+        console.log(name, value);
+        setFormData({ ...formData, [name]: value })
+   }
 
     const handleSubmit = (event) => {
         event.preventDefault()
@@ -90,14 +103,17 @@ const LectureForm = ({ initialValues, onSubmit }) => {
                         <InputLabel id="subjectLabel">Subject</InputLabel>
                         <Select
                             labelId="subjectLabel"
-                            id="subject"
+                            id="subjectId"
+                            name="subjectId"
                             value={formData.subjectId}
                             label="Subject"
                             onChange={handleChange}
                         >
-                            <MenuItem value="1">AI</MenuItem>
-                            <MenuItem value="2">DSA</MenuItem>
-                            <MenuItem value="3">Project Management</MenuItem>
+                            {subjects.map(subject => (
+                                <MenuItem key={subject.id} value={subject.id}>
+                                    {subject.name}
+                                </MenuItem>
+                            ))}
                         </Select>
                     </FormControl>
                 </Grid2>
