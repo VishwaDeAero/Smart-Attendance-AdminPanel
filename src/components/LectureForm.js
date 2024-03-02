@@ -1,6 +1,7 @@
 import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material'
 import { getAllSubjects } from '../services/subjectService'
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 
@@ -12,7 +13,7 @@ const LectureForm = ({ initialValues, onSubmit }) => {
         lecturer: '',
         duration: '',
         location: '',
-        scheduledAt: '',
+        scheduledAt: moment(),
     })
 
     useEffect(() => {
@@ -35,9 +36,8 @@ const LectureForm = ({ initialValues, onSubmit }) => {
 
     const handleChange = (event) => {
         const { name, value } = event.target
-        console.log(name, value);
         setFormData({ ...formData, [name]: value })
-   }
+    }
 
     const handleSubmit = (event) => {
         event.preventDefault()
@@ -48,14 +48,27 @@ const LectureForm = ({ initialValues, onSubmit }) => {
     return (
         <form onSubmit={handleSubmit}>
             <Grid2 sm={12} md={8} container spacing={2}>
-                <Grid2 item xs={12} md={4}>
+                <Grid2 item xs={12} md={8}>
+                    <FormControl fullWidth>
+                        <DateTimePicker
+                            id="scheduledAt"
+                            name="scheduledAt"
+                            label="Date & Time"
+                            value={moment(formData.scheduledAt)}
+                            onChange={(event)=>{setFormData({ ...formData, "scheduledAt": event })}}
+                            fullWidth
+                            required
+                        />
+                    </FormControl>
+                </Grid2>
+                {/* <Grid2 item xs={12} md={4}>
                     <FormControl fullWidth>
                         <TextField
                             id="date"
                             name="date"
                             label="Date"
                             type="date"
-                            value={moment(formData.scheduledAt).format('YYYY-MM-DD')}
+                            value={moment(formData.date).format('YYYY-MM-DD')}
                             onChange={handleChange}
                             InputLabelProps={{
                                 shrink: true,
@@ -64,24 +77,7 @@ const LectureForm = ({ initialValues, onSubmit }) => {
                             required
                         />
                     </FormControl>
-                </Grid2>
-                <Grid2 item xs={12} md={4}>
-                    <FormControl fullWidth>
-                        <TextField
-                            id="time"
-                            name="time"
-                            label="Time"
-                            type="time"
-                            value={moment(formData.scheduledAt).format('HH:mm')}
-                            onChange={handleChange}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                            fullWidth
-                            required
-                        />
-                    </FormControl>
-                </Grid2>
+                </Grid2> */}
                 <Grid2 item xs={12} md={4}>
                     <FormControl fullWidth>
                         <TextField
@@ -109,6 +105,9 @@ const LectureForm = ({ initialValues, onSubmit }) => {
                             label="Subject"
                             onChange={handleChange}
                         >
+                            <MenuItem key={0} value={0} disabled={true}>
+                                Select Subject
+                            </MenuItem>
                             {subjects.map(subject => (
                                 <MenuItem key={subject.id} value={subject.id}>
                                     {subject.name}
