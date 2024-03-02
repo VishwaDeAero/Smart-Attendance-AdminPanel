@@ -31,11 +31,14 @@ const LectureView = () => {
             field: 'subject',
             headerName: 'Subject',
             flex: 2,
+            renderCell: (params) => (
+                <>{params.value.name}</>
+            ),
         },
         {
             field: 'location',
             headerName: 'Location',
-            flex: 2
+            flex: 1
         },
         {
             field: 'lecturer',
