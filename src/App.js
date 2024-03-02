@@ -10,6 +10,7 @@ import UserRoute from './routes/UserRoute'
 import SubjectRoute from './routes/SubjectRoute'
 import StudentRoute from './routes/StudentRoute'
 import LectureRoute from './routes/LectureRoute'
+import AttendanceRoute from './routes/AttendanceRoute';
 
 function App() {
   return (
@@ -22,6 +23,8 @@ function App() {
           <Route path="/login" exact element={<SignIn />} />
           {/* Users Routes */}
           <Route path="/users/*" element={<UserRoute />} />
+          {/* Attendance Routes */}
+          <Route path="/attendance/*" element={<AttendanceRoute />} />
           {/* Subject Routes */}
           <Route path="/subjects/*" element={<SubjectRoute />} />
           {/* Student Routes */}
