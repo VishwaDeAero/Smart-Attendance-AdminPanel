@@ -1,4 +1,4 @@
-import { DataGrid } from '@mui/x-data-grid'
+import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 import React from 'react'
 
 const DataTable = ({ columns, rows, page, pageSizeOptions }) => {
@@ -12,6 +12,7 @@ const DataTable = ({ columns, rows, page, pageSizeOptions }) => {
         <DataGrid
             rows={rows}
             columns={columns}
+            slots={{ toolbar: GridToolbar }}
             initialState={{
                 pagination: {
                     paginationModel: { page: page? page: 0, pageSize: defaultPageSizeOptions[0] },
