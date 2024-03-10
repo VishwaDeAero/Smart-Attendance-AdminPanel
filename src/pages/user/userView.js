@@ -42,6 +42,14 @@ const UserView = () => {
             flex: 2
         },
         {
+            field: 'role',
+            headerName: 'User Type',
+            flex: 2,
+            renderCell: (params) => (
+                <>{params.value.name}</>
+            ),
+        },
+        {
             field: 'status',
             headerName: 'Status',
             headerAlign: 'center',
