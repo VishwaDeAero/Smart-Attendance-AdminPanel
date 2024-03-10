@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import MainLayout from '../../components/MainLayout'
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
-import { Box, Button, Divider, IconButton, Switch, Typography } from '@mui/material'
+import { Box, Button, Divider, IconButton, List, ListItem, ListItemText, Switch, Typography } from '@mui/material'
 import { Delete, Visibility } from '@mui/icons-material'
 import moment from 'moment';
 import DataTable from '../../components/DataTable'
@@ -29,12 +29,28 @@ const StudentView = () => {
         {
             field: 'name',
             headerName: 'Name',
-            flex: 3,
+            flex: 2,
         },
         {
             field: 'indexNo',
             headerName: 'Index Number',
             flex: 2
+        },
+        {
+            field: 'subjects',
+            headerName: 'Enrolled Subjects',
+            flex: 2,
+            renderCell: (params) => (
+                <List dense={true}>
+                    {(params.value).map((subject) => {
+                        return <ListItem sx={{
+                            px: 0
+                        }}>
+                            <ListItemText>{subject.name}</ListItemText>
+                        </ListItem>
+                    })}
+                </List>
+            ),
         },
         {
             field: 'status',
@@ -89,7 +105,7 @@ const StudentView = () => {
         try {
             const studentsData = await getAllStudents()
             if (studentsData?.data) {
-                console.log("Students Data",studentsData)
+                console.log("Students Data", studentsData)
                 setStudents(studentsData.data)
             }
         } catch (error) {
