@@ -1,4 +1,5 @@
 import * as React from 'react'
+import useSignIn from 'react-auth-kit/hooks/useSignIn'
 import Button from '@mui/material/Button'
 import CssBaseline from '@mui/material/CssBaseline'
 import TextField from '@mui/material/TextField'
@@ -9,6 +10,9 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
+import { loginUser } from '../services/authService'
+import { closeAlert, showAlert, showLoading } from '../utils/swal'
+import { useNavigate } from 'react-router-dom'
 
 function Copyright(props) {
     return (
@@ -26,11 +30,38 @@ function Copyright(props) {
 const defaultTheme = createTheme()
 
 export default function SignIn() {
-    const handleSubmit = (event) => {
+    const signIn = useSignIn()
+    const navigate = useNavigate();
+    
+    const handleSubmit = async (event) => {
         event.preventDefault()
+        showLoading()
         const data = new FormData(event.currentTarget)
+        const login_info = {
+            username: data.get('username'),
+            password: data.get('password'),
+        }
+        await loginUser(login_info).then((res) => {
+            if (res.status === "OK") {
+                if (signIn({
+                    auth: {
+                        token: res.token,
+                        type: 'Bearer',
+                    },
+                    userState: res.user
+                })) {
+                    navigate('/') // redirect to home route
+                    closeAlert()
+                } else {
+                    //Throw error
+                }
+            }
+            else{
+                showAlert("Something Went Wrong", res, 'error')
+            }
+        }).catch((error) => showAlert("Something Went Wrong", error, 'error'))
         console.log({
-            email: data.get('email'),
+            username: data.get('username'),
             password: data.get('password'),
         })
     }
@@ -62,14 +93,14 @@ export default function SignIn() {
                     }}
                 >
                     <img
-                            src="/assets/logos/header-logo.svg" // replace with the actual path to your logo image
-                            alt="Logo"
-                            style={{ width: '10rem', height: 'auto', marginBottom: 8 }} // adjust the size as needed
-                        />
+                        src="/assets/logos/header-logo.svg" // replace with the actual path to your logo image
+                        alt="Logo"
+                        style={{ width: '10rem', height: 'auto', marginBottom: 8 }} // adjust the size as needed
+                    />
                     {/* <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
                         <LockOutlinedIcon />
                     </Avatar> */}
-                    <Typography component="h1" variant="h5" color="primary"  style={{ fontWeight: 'bold'}}>
+                    <Typography component="h1" variant="h5" color="primary" style={{ fontWeight: 'bold' }}>
                         Sign In
                     </Typography>
                     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
@@ -77,10 +108,10 @@ export default function SignIn() {
                             margin="normal"
                             required
                             fullWidth
-                            id="email"
-                            label="Email Address"
-                            name="email"
-                            autoComplete="email"
+                            id="username"
+                            label="Username"
+                            name="username"
+                            autoComplete="username"
                             autoFocus
                         />
                         <TextField
@@ -105,7 +136,7 @@ export default function SignIn() {
                         >
                             Sign In
                         </Button>
-                        <Copyright/>
+                        <Copyright />
                     </Box>
                 </Box>
             </Container>
