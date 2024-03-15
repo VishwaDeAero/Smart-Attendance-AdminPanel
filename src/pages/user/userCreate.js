@@ -10,10 +10,10 @@ import { showAlert, showLoading } from '../../utils/swal'
 
 const UserCreate = () => {
 
-  const handleUserCreate = async (data) => {
+  const handleUserCreate = async (data, auth) => {
     showLoading()
     try {
-        const userData = await createUser(data)
+        const userData = await createUser(data, auth)
         console.log(userData)
         showAlert("New User Created",`New user created successfully.`, "success")
     } catch (error) {

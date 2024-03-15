@@ -3,17 +3,19 @@ import { Button, Divider, FormControl, IconButton, InputAdornment, InputLabel, M
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
 import React, { useEffect, useState } from 'react'
 import { getAllRoles } from '../services/rolesService'
+import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader'
 
 const UserForm = ({ initialValues, onSubmit }) => {
-    const [roles, setRoles] = useState([]);
+    const auth = useAuthHeader()
+    const [roles, setRoles] = useState([])
     const [formData, setFormData] = useState({
         id: null,
         name: '',
         username: '',
         email: '',
         roleId: '',
-        password: '',
-        confirm_password: '',
+        password: null,
+        confirm_password: null,
     })
 
     const [showPassword, setShowPassword] = React.useState(false)
@@ -46,7 +48,7 @@ const UserForm = ({ initialValues, onSubmit }) => {
     const handleSubmit = (event) => {
         event.preventDefault()
         // Call the onSubmit function with the form data
-        formData.id ? onSubmit(formData.id, formData) : onSubmit(formData)
+        formData.id ? onSubmit(formData.id, formData, auth) : onSubmit(formData, auth)
     }
 
     return (
@@ -95,8 +97,8 @@ const UserForm = ({ initialValues, onSubmit }) => {
                     <FormControl fullWidth>
                         <InputLabel id="role-label">User Role</InputLabel>
                         <Select
-                            id="role"
-                            name="role"
+                            id="roleId"
+                            name="roleId"
                             label="User Role"
                             labelId="role-label"
                             value={formData.roleId}

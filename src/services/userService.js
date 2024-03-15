@@ -11,9 +11,13 @@ export const getAllUsers = async () => {
   }
 };
 
-export const createUser = async (userData) => {
+export const createUser = async (userData, auth) => {
   try {
-    const response = await axios.post(BASE_URL, userData);
+    const response = await axios.post(BASE_URL, userData, {
+      headers: {
+        Authorization: `${auth}`
+      }
+    });
     return response.data;
   } catch (error) {
     throw error.response.data;
@@ -29,18 +33,26 @@ export const getUser = async (userId) => {
   }
 };
 
-export const updateUser = async (userId, updatedUserData) => {
+export const updateUser = async (userId, updatedUserData, auth) => {
   try {
-    const response = await axios.patch(`${BASE_URL}/${userId}`, updatedUserData);
+    const response = await axios.patch(`${BASE_URL}/${userId}`, updatedUserData, {
+      headers: {
+        Authorization: `${auth}`
+      }
+    });
     return response.data;
   } catch (error) {
     throw error.response.data;
   }
 };
 
-export const deleteUser = async (userId) => {
+export const deleteUser = async (userId, auth) => {
   try {
-    await axios.delete(`${BASE_URL}/${userId}`);
+    await axios.delete(`${BASE_URL}/${userId}`, {
+      headers: {
+        Authorization: `${auth}`
+      }
+    });
   } catch (error) {
     throw error.response.data;
   }

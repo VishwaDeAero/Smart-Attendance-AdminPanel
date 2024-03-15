@@ -26,10 +26,10 @@ const UserUpdate = () => {
         }
     }
 
-    const handleUserUpdate = async (id, data) => {
+    const handleUserUpdate = async (id, data, auth) => {
         showLoading()
         try {
-            const userData = await updateUser(id, data)
+            const userData = await updateUser(id, data, auth)
             console.log(userData)
             fetchUser(id)
             showAlert("Update Successful",`User id:${id} updated successfully.`, "success")
