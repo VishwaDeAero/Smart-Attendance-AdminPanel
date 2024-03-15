@@ -4,13 +4,17 @@ import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
+import { getAllLecturers } from '../services/userService';
+import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 
 const LectureForm = ({ initialValues, onSubmit }) => {
-    const [subjects, setSubjects] = useState([]);
+    const authUser = useAuthUser()
+    const [subjects, setSubjects] = useState([])
+    const [lecturers, setLecturers] = useState([])
     const [formData, setFormData] = useState({
         id: null,
         subjectId: '',
-        lecturer: '',
+        lecturerId: '',
         duration: '',
         location: '',
         scheduledAt: moment(),
@@ -31,8 +35,16 @@ const LectureForm = ({ initialValues, onSubmit }) => {
             })
             .catch(error => {
                 console.error('Error fetching subjects:', error);
-            });
-    }, []);
+            })
+        // Fetch lecturers from your API
+        getAllLecturers()
+            .then(lecturers => {
+                setLecturers(lecturers);
+            })
+            .catch(error => {
+                console.error('Error fetching lecturers:', error);
+            })
+    }, [])
 
     const handleChange = (event) => {
         const { name, value } = event.target
@@ -55,7 +67,7 @@ const LectureForm = ({ initialValues, onSubmit }) => {
                             name="scheduledAt"
                             label="Date & Time"
                             value={moment(formData.scheduledAt)}
-                            onChange={(event)=>{setFormData({ ...formData, "scheduledAt": event })}}
+                            onChange={(event) => { setFormData({ ...formData, "scheduledAt": event }) }}
                             fullWidth
                             required
                         />
@@ -118,15 +130,24 @@ const LectureForm = ({ initialValues, onSubmit }) => {
                 </Grid2>
                 <Grid2 xs={12} md={6}>
                     <FormControl fullWidth>
-                        <TextField
-                            id="lecturer"
-                            name="lecturer"
-                            label="Lecturer"
-                            value={formData.lecturer}
+                        <InputLabel id="lecturerLabel">Lecturer</InputLabel>
+                        <Select
+                            labelId="lecturerLabel"
+                            id="lecturerId"
+                            name="lecturerId"
+                            value={formData.lecturerId}
+                            label="Subject"
                             onChange={handleChange}
-                            variant="outlined"
-                            required
-                        />
+                        >
+                            <MenuItem key={0} value={0} disabled={true}>
+                                Select Lecturer
+                            </MenuItem>
+                            {lecturers.map(lecturer => (
+                                <MenuItem key={lecturer.id} value={lecturer.id}>
+                                    {lecturer.name}
+                                </MenuItem>
+                            ))}
+                        </Select>
                     </FormControl>
                 </Grid2>
                 <Grid2 xs={12} md={6}>

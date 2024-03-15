@@ -11,6 +11,16 @@ export const getAllUsers = async () => {
   }
 };
 
+export const getAllLecturers = async () => {
+  try {
+    const response = await axios.get(BASE_URL);
+    const lecturers = (response.data.data).filter(item => item.role?.name === 'Lecturer')
+    return lecturers;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
 export const createUser = async (userData, auth) => {
   try {
     const response = await axios.post(BASE_URL, userData, {
