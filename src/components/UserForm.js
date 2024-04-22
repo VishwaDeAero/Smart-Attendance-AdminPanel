@@ -2,16 +2,20 @@ import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { Button, Divider, FormControl, IconButton, InputAdornment, InputLabel, MenuItem, Select, TextField } from '@mui/material'
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
 import React, { useEffect, useState } from 'react'
+import { getAllRoles } from '../services/rolesService'
+import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader'
 
 const UserForm = ({ initialValues, onSubmit }) => {
+    const auth = useAuthHeader()
+    const [roles, setRoles] = useState([])
     const [formData, setFormData] = useState({
         id: null,
         name: '',
         username: '',
         email: '',
-        role: '',
-        password: '',
-        confirm_password: '',
+        roleId: '',
+        password: null,
+        confirm_password: null,
     })
 
     const [showPassword, setShowPassword] = React.useState(false)
@@ -20,9 +24,21 @@ const UserForm = ({ initialValues, onSubmit }) => {
     useEffect(() => {
         // Set initial values when provided through props
         if (initialValues) {
+            console.log(initialValues)
             setFormData(initialValues)
         }
     }, [initialValues])
+
+    useEffect(() => {
+        // Fetch roles from API
+        getAllRoles()
+            .then(roles => {
+                setRoles(roles.data);
+            })
+            .catch(error => {
+                console.error('Error fetching roles:', error);
+            });
+    }, []);
 
     const handleChange = (event) => {
         const { name, value } = event.target
@@ -32,7 +48,7 @@ const UserForm = ({ initialValues, onSubmit }) => {
     const handleSubmit = (event) => {
         event.preventDefault()
         // Call the onSubmit function with the form data
-        formData.id? onSubmit(formData.id,formData): onSubmit(formData)
+        formData.id ? onSubmit(formData.id, formData, auth) : onSubmit(formData, auth)
     }
 
     return (
@@ -77,84 +93,93 @@ const UserForm = ({ initialValues, onSubmit }) => {
                         />
                     </FormControl>
                 </Grid2>
-                {/* <Grid2 xs={12} md={6}>
+                <Grid2 xs={12} md={12}>
                     <FormControl fullWidth>
                         <InputLabel id="role-label">User Role</InputLabel>
                         <Select
-                            id="role"
-                            name="role"
+                            id="roleId"
+                            name="roleId"
                             label="User Role"
                             labelId="role-label"
-                            value={formData.role}
+                            value={formData.roleId}
                             onChange={handleChange}
                             variant="outlined"
                             required
                         >
-                            <MenuItem value="admin">Admin</MenuItem>
-                            <MenuItem value="moderator">Moderator</MenuItem>
-                            <MenuItem value="lecturer">Lecturer</MenuItem>
+                            <MenuItem key={0} value={0} disabled={true}>
+                                Select Role
+                            </MenuItem>
+                            {roles.map(role => (
+                                <MenuItem key={role.id} value={role.id}>
+                                    {role.name}
+                                </MenuItem>
+                            ))}
                         </Select>
                     </FormControl>
-                </Grid2> */}
-                <Grid2 xs={12}>
-                    <Divider sx={{ my: 1 }} />
                 </Grid2>
-                <Grid2 xs={12} md={6}>
-                    <FormControl fullWidth>
-                        <TextField
-                            id="password"
-                            name="password"
-                            label="Password"
-                            type={showPassword ? 'text' : 'password'}
-                            // value={formData.password}
-                            onChange={handleChange}
-                            variant="outlined"
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            aria-label="toggle password visibility"
-                                            onClick={handleClickShowPassword}
-                                            edge="end"
-                                        >
-                                            {showPassword ? <VisibilityOff /> : <Visibility />}
-                                        </IconButton>
-                                    </InputAdornment>
-                                ),
-                            }}
-                            required
-                        />
-                    </FormControl>
-                </Grid2>
-                <Grid2 xs={12} md={6}>
-                    <FormControl fullWidth>
-                        <TextField
-                            id="confirm_password"
-                            name="confirm_password"
-                            label="Re-Enter Password"
-                            type={showPassword ? 'text' : 'password'}
-                            // value={formData.confirm_password}
-                            onChange={handleChange}
-                            variant="outlined"
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            aria-label="toggle password visibility"
-                                            onClick={handleClickShowPassword}
-                                            edge="end"
-                                        >
-                                            {showPassword ? <VisibilityOff /> : <Visibility />}
-                                        </IconButton>
-                                    </InputAdornment>
-                                ),
-                            }}
-                            required
-                        />
-                    </FormControl>
-                </Grid2>
-                <Grid2 sm={12} md='auto'>
-                    <Button type="submit" variant="contained" color="primary" sx={{ width: {sm:'100%', md:'auto'}}}>
+                {initialValues == null && (
+                    <>
+                        <Grid2 xs={12}>
+                            <Divider sx={{ my: 1 }} />
+                        </Grid2>
+                        <Grid2 xs={12} md={6}>
+                            <FormControl fullWidth>
+                                <TextField
+                                    id="password"
+                                    name="password"
+                                    label="Password"
+                                    type={showPassword ? 'text' : 'password'}
+                                    // value={formData.password}
+                                    onChange={handleChange}
+                                    variant="outlined"
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    aria-label="toggle password visibility"
+                                                    onClick={handleClickShowPassword}
+                                                    edge="end"
+                                                >
+                                                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                    required
+                                />
+                            </FormControl>
+                        </Grid2>
+                        <Grid2 xs={12} md={6}>
+                            <FormControl fullWidth>
+                                <TextField
+                                    id="confirm_password"
+                                    name="confirm_password"
+                                    label="Re-Enter Password"
+                                    type={showPassword ? 'text' : 'password'}
+                                    // value={formData.confirm_password}
+                                    onChange={handleChange}
+                                    variant="outlined"
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    aria-label="toggle password visibility"
+                                                    onClick={handleClickShowPassword}
+                                                    edge="end"
+                                                >
+                                                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                    required
+                                />
+                            </FormControl>
+                        </Grid2>
+                    </>
+                )}
+                <Grid2 sm={12} md={12}>
+                    <Button type="submit" variant="contained" color="primary" sx={{ width: { sm: '100%', md: 'auto' } }}>
                         Submit
                     </Button>
                 </Grid2>

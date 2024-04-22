@@ -1,8 +1,11 @@
 import React from 'react'
 import MainLayout from '../components/MainLayout'
 import { Typography } from '@mui/material'
+import useAuthUser from 'react-auth-kit/hooks/useAuthUser'
 
 const Sample = () => {
+    const userAuth = useAuthUser()
+    console.log(userAuth)
     return (
         <MainLayout>
             <Typography paragraph>

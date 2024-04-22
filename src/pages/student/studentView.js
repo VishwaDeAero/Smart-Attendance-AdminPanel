@@ -34,18 +34,16 @@ const StudentView = () => {
         {
             field: 'indexNo',
             headerName: 'Index Number',
-            flex: 2
+            flex: 1
         },
         {
             field: 'subjects',
             headerName: 'Enrolled Subjects',
             flex: 2,
             renderCell: (params) => (
-                <List dense={true}>
+                <List disablePadding={true} dense={true}>
                     {(params.value).map((subject) => {
-                        return <ListItem sx={{
-                            px: 0
-                        }}>
+                        return <ListItem disablePadding={true}>
                             <ListItemText>{subject.name}</ListItemText>
                         </ListItem>
                     })}

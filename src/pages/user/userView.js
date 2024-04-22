@@ -8,9 +8,11 @@ import DataTable from '../../components/DataTable'
 import { Link } from 'react-router-dom'
 import { showAlert, showLoading, closeAlert } from '../../utils/swal'
 import { deleteUser, getAllUsers, updateUser } from '../../services/userService'
+import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader'
 
 const UserView = () => {
 
+    const auth = useAuthHeader()
     const [users, setUsers] = useState([])
 
     useEffect(() => {
@@ -120,7 +122,7 @@ const UserView = () => {
             async () => {
                 showLoading()
                 try {
-                    const usersData = await deleteUser(id)
+                    const usersData = await deleteUser(id, auth)
                     console.log(usersData)
                     fetchUsers()
                     showAlert("User Deleted", `user id:${id} deleted successfully.`, "success")
@@ -134,7 +136,7 @@ const UserView = () => {
 
     const handleStatusToggle = async (id, status) => {
         try {
-            const usersData = await updateUser(id, { status: status ? 1 : 0 })
+            const usersData = await updateUser(id, { status: status ? 1 : 0 }, auth)
             console.log(usersData)
             fetchUsers()
         } catch (error) {

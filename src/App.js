@@ -11,26 +11,30 @@ import SubjectRoute from './routes/SubjectRoute'
 import StudentRoute from './routes/StudentRoute'
 import LectureRoute from './routes/LectureRoute'
 import AttendanceRoute from './routes/AttendanceRoute';
+import AuthOutlet from '@auth-kit/react-router/AuthOutlet';
 
 function App() {
   return (
     <LocalizationProvider dateAdapter={AdapterMoment}>
       <Router>
         <Routes>
-          {/* Home Page */}
-          <Route path="/" exact element={<Sample />} />
           {/* Login Page */}
           <Route path="/login" exact element={<SignIn />} />
-          {/* Users Routes */}
-          <Route path="/users/*" element={<UserRoute />} />
-          {/* Attendance Routes */}
-          <Route path="/attendance/*" element={<AttendanceRoute />} />
-          {/* Subject Routes */}
-          <Route path="/subjects/*" element={<SubjectRoute />} />
-          {/* Student Routes */}
-          <Route path="/students/*" element={<StudentRoute />} />
-          {/* Lecture Routes */}
-          <Route path="/lectures/*" element={<LectureRoute />} />
+          {/* Auth Kit Authentication Protected Routes */}
+          <Route element={<AuthOutlet fallbackPath='/login' />}>
+            {/* Home Page */}
+            <Route path="/" exact element={<Sample />} />
+            {/* Users Routes */}
+            <Route path="/users/*" element={<UserRoute />} />
+            {/* Attendance Routes */}
+            <Route path="/attendance/*" element={<AttendanceRoute />} />
+            {/* Subject Routes */}
+            <Route path="/subjects/*" element={<SubjectRoute />} />
+            {/* Student Routes */}
+            <Route path="/students/*" element={<StudentRoute />} />
+            {/* Lecture Routes */}
+            <Route path="/lectures/*" element={<LectureRoute />} />
+          </Route>
           <Route path="/test" exact element={<Test />} />
           {/* 404 Page */}
           <Route path="*" exact element={<PageNotFound />} />
