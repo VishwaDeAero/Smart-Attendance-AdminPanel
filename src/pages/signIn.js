@@ -60,10 +60,6 @@ export default function SignIn() {
                 showAlert("Something Went Wrong", res, 'error')
             }
         }).catch((error) => showAlert("Something Went Wrong", error, 'error'))
-        console.log({
-            username: data.get('username'),
-            password: data.get('password'),
-        })
     }
 
     return (
