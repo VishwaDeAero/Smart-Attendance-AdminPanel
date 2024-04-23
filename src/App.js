@@ -12,6 +12,7 @@ import StudentRoute from './routes/StudentRoute'
 import LectureRoute from './routes/LectureRoute'
 import AttendanceRoute from './routes/AttendanceRoute';
 import AuthOutlet from '@auth-kit/react-router/AuthOutlet';
+import DashboardView from './pages/dashboard/dashboardView';
 
 function App() {
   return (
@@ -23,7 +24,7 @@ function App() {
           {/* Auth Kit Authentication Protected Routes */}
           <Route element={<AuthOutlet fallbackPath='/login' />}>
             {/* Home Page */}
-            <Route path="/" exact element={<Sample />} />
+            <Route path="/" exact element={<DashboardView />} />
             {/* Users Routes */}
             <Route path="/users/*" element={<UserRoute />} />
             {/* Attendance Routes */}
