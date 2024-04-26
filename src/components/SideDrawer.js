@@ -29,9 +29,9 @@ const SideDrawer = ({ drawerWidth, open, handleDrawerClose }) => {
   ]
 
   const reportItems = [
-    { text: 'Lectures', route: '/reports/lectures', icon: <QueryStats /> },
-    { text: 'Subjects', route: '/reports/subjects', icon: <ShowChart /> },
-    { text: 'Students', route: '/reports/students', icon: <BarChart /> },
+    { text: 'Lectures', route: '/reports/lecture', icon: <QueryStats /> },
+    { text: 'Subjects', route: '/reports/subject', icon: <ShowChart /> },
+    { text: 'Students', route: '/reports/student', icon: <BarChart /> },
   ]
 
   const userItems = [
