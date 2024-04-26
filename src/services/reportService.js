@@ -1,0 +1,16 @@
+import axios from 'axios'
+
+const BASE_URL = `${process.env.REACT_APP_BASE_API_URL}/reports`
+
+export const getStudentAttendance = async (attendanceData, auth) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/student`, attendanceData, {
+        headers: {
+          Authorization: `${auth}`
+        }
+      });
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
