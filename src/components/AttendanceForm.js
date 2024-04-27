@@ -95,7 +95,7 @@ const AttendanceForm = ({ open, onClose, onSubmit }) => {
                                 </Select>
                             </FormControl>
                         </Grid2>
-                        <Grid2 item xs={12} md={12}>
+                        <Grid2 xs={12} md={12}>
                             <FormControl fullWidth>
                                 <DateTimePicker
                                     id="attendedAt"
