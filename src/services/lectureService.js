@@ -20,9 +20,13 @@ export const getLecturesBySubject = async (subjectId) => {
   }
 };
 
-export const createLecture = async (lectureData) => {
+export const createLecture = async (lectureData, auth) => {
   try {
-    const response = await axios.post(BASE_URL, lectureData);
+    const response = await axios.post(BASE_URL, lectureData, {
+      headers: {
+        Authorization: `${auth}`
+      }
+  });
     return response.data;
   } catch (error) {
     throw error.response.data;
