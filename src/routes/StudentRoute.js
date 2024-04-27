@@ -1,6 +1,5 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
-import StudentHistory from '../pages/student/studentHistory'
 import StudentUpdate from '../pages/student/studentUpdate'
 import StudentView from '../pages/student/studentView'
 

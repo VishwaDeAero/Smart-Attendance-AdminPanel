@@ -10,10 +10,10 @@ import { showAlert, showLoading } from '../../utils/swal'
 
 const SubjectCreate = () => {
 
-  const handleSubjectCreate = async (data) => {
+  const handleSubjectCreate = async (data, auth) => {
     showLoading()
     try {
-        const subjectData = await createSubject(data)
+        const subjectData = await createSubject(data, auth)
         console.log(subjectData)
         showAlert("New Subject Created",`New subject created successfully.`, "success")
     } catch (error) {

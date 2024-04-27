@@ -10,10 +10,10 @@ import { showAlert, showLoading } from '../../utils/swal'
 
 const LectureCreate = () => {
 
-  const handleLectureCreate = async (data) => {
+  const handleLectureCreate = async (data, auth) => {
     showLoading()
     try {
-        const lectureData = await createLecture(data)
+        const lectureData = await createLecture(data, auth)
         console.log(lectureData)
         showAlert("New Lecture Created",`New lecture created successfully.`, "success")
     } catch (error) {

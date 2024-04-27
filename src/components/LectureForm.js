@@ -1,14 +1,16 @@
-import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material'
+import { Button, FormControl, FormHelperText, InputLabel, MenuItem, Select, TextField } from '@mui/material'
 import { getAllSubjects } from '../services/subjectService'
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import { getAllLecturers } from '../services/userService';
-import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
+import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
 
 const LectureForm = ({ initialValues, onSubmit }) => {
-    const authUser = useAuthUser()
+    const Joi = require('joi');
+    const auth = useAuthHeader()
+    const [errors, setErrors] = useState({})
     const [subjects, setSubjects] = useState([])
     const [lecturers, setLecturers] = useState([])
     const [formData, setFormData] = useState({
@@ -49,48 +51,80 @@ const LectureForm = ({ initialValues, onSubmit }) => {
     const handleChange = (event) => {
         const { name, value } = event.target
         setFormData({ ...formData, [name]: value })
+
+        // Check if the error exists for the field being changed
+        if (errors[name]) {
+            // Remove the error for the field being changed
+            setErrors((prevErrors) => {
+                const { [name]: _, ...rest } = prevErrors; // Omit the error for the field being changed
+                return rest; // Return the remaining errors
+            });
+        }
     }
+
+    const validateForm = (formData) => {
+        const schema = Joi.object({
+            id: Joi.number().allow(null),
+            subjectId: Joi.number().required(),
+            lecturerId: Joi.number().required(),
+            duration: Joi.number().required(),
+            location: Joi.string().required(),
+            scheduledAt: Joi.date().required(),
+        });
+        const { error } = schema.validate(formData, { abortEarly: false });
+        const errorsList = {};
+
+        if (error) {
+            error.details.forEach((err) => {
+                errorsList[err.context.key] = err.message;
+            });
+        }
+
+        // Set the errors state
+        setErrors(errorsList);
+
+        // Return true if there are no errors, otherwise return false
+        return Object.keys(errors).length === 0;
+    };
 
     const handleSubmit = (event) => {
         event.preventDefault()
-        // Call the onSubmit function with the form data
-        formData.id ? onSubmit(formData.id, formData) : onSubmit(formData)
+        // Validate Fields
+        if (validateForm(formData)) {
+            // Call the onSubmit function with the form data
+            formData.id ? onSubmit(formData.id, formData, auth) : onSubmit(formData, auth)
+            // Clear the formData state
+            setFormData({
+                subjectId: '',
+                lecturerId: '',
+                duration: '',
+                location: '',
+                scheduledAt: moment(),
+            });
+        }
     }
 
     return (
         <form onSubmit={handleSubmit}>
             <Grid2 sm={12} md={8} container spacing={2}>
-                <Grid2 item xs={12} md={8}>
+                <Grid2 xs={12} md={8}>
                     <FormControl fullWidth>
                         <DateTimePicker
                             id="scheduledAt"
                             name="scheduledAt"
                             label="Date & Time"
                             value={moment(formData.scheduledAt)}
+                            error={!!errors.scheduledAt}
+                            helperText={errors.scheduledAt}
+                            disablePast={true}
+                            ampm={false}
                             onChange={(event) => { setFormData({ ...formData, "scheduledAt": event }) }}
                             fullWidth
                             required
                         />
                     </FormControl>
                 </Grid2>
-                {/* <Grid2 item xs={12} md={4}>
-                    <FormControl fullWidth>
-                        <TextField
-                            id="date"
-                            name="date"
-                            label="Date"
-                            type="date"
-                            value={moment(formData.date).format('YYYY-MM-DD')}
-                            onChange={handleChange}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                            fullWidth
-                            required
-                        />
-                    </FormControl>
-                </Grid2> */}
-                <Grid2 item xs={12} md={4}>
+                <Grid2 xs={12} md={4}>
                     <FormControl fullWidth>
                         <TextField
                             id="duration"
@@ -99,9 +133,10 @@ const LectureForm = ({ initialValues, onSubmit }) => {
                             value={formData.duration}
                             onChange={handleChange}
                             variant="outlined"
+                            error={!!errors.duration}
+                            helperText={errors.duration}
                             type="number"
-                            step="0.5"
-                            inputProps={{ min: 0, max: 9.9 }}
+                            inputProps={{ step: 0.5, min: 0, max: 9.9 }}
                             required
                         />
                     </FormControl>
@@ -116,6 +151,7 @@ const LectureForm = ({ initialValues, onSubmit }) => {
                             value={formData.subjectId}
                             label="Subject"
                             onChange={handleChange}
+                            error={!!errors.subjectId}
                         >
                             <MenuItem key={0} value={0} disabled={true}>
                                 Select Subject
@@ -126,6 +162,7 @@ const LectureForm = ({ initialValues, onSubmit }) => {
                                 </MenuItem>
                             ))}
                         </Select>
+                        {errors.roleId && <FormHelperText>{errors.subjectId}</FormHelperText>}
                     </FormControl>
                 </Grid2>
                 <Grid2 xs={12} md={6}>
@@ -138,6 +175,7 @@ const LectureForm = ({ initialValues, onSubmit }) => {
                             value={formData.lecturerId}
                             label="Subject"
                             onChange={handleChange}
+                            error={!!errors.lecturerId}
                         >
                             <MenuItem key={0} value={0} disabled={true}>
                                 Select Lecturer
@@ -148,6 +186,7 @@ const LectureForm = ({ initialValues, onSubmit }) => {
                                 </MenuItem>
                             ))}
                         </Select>
+                        {errors.roleId && <FormHelperText>{errors.lecturerId}</FormHelperText>}
                     </FormControl>
                 </Grid2>
                 <Grid2 xs={12} md={6}>
@@ -158,6 +197,8 @@ const LectureForm = ({ initialValues, onSubmit }) => {
                             label="Lecture Location"
                             value={formData.location}
                             onChange={handleChange}
+                            error={!!errors.location}
+                            helperText={errors.location}
                             variant="outlined"
                         />
                     </FormControl>
