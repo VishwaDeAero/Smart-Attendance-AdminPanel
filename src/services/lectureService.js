@@ -11,6 +11,15 @@ export const getAllLectures = async () => {
   }
 };
 
+export const getLecturesBySubject = async (subjectId) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/subject/${subjectId}`);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
 export const createLecture = async (lectureData) => {
   try {
     const response = await axios.post(BASE_URL, lectureData);

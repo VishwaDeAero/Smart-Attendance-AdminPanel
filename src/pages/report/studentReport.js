@@ -151,12 +151,7 @@ const StudentReportView = () => {
                                 e.stopPropagation()
                                 if (formData.studentId) {
                                     showLoading()
-                                    let attendanceData = {
-                                        student_id: formData.studentId,
-                                        start_date: formData.startDate,
-                                        end_date: formData.endDate,
-                                    }
-                                    fetchStudentAttendances(attendanceData)
+                                    fetchStudentAttendances(formData)
                                 }
                             }
                         }>
