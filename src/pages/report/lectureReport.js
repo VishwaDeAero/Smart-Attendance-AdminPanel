@@ -152,7 +152,8 @@ const LectureReportView = () => {
                         </FormControl>
                     </Grid2>
                     <Grid2 xs={12} md={4} sx={{
-                        textAlign: 'start'
+                        textAlign: 'start',
+                        alignSelf: 'center'
                     }}>
                         <Button variant="contained" endIcon={<Search />} onClick={
                             (e) => {
