@@ -1,5 +1,5 @@
-import { AccountCircle, Analytics, ChevronLeft, ChevronRight, HowToReg, Logout, People, Public, School } from '@mui/icons-material'
-import { Divider, Drawer, IconButton, styled, useTheme } from '@mui/material'
+import { AccountCircle, Analytics, BarChart, ChevronLeft, ChevronRight, HowToReg, Logout, People, Public, QueryStats, School, ShowChart } from '@mui/icons-material'
+import { Divider, Drawer, IconButton, List, ListItem, Typography, styled, useTheme } from '@mui/material'
 import React from 'react'
 import AppLogo from './AppLogo'
 import ListItemRender from './ListItemRender'
@@ -28,7 +28,13 @@ const SideDrawer = ({ drawerWidth, open, handleDrawerClose }) => {
     { text: 'Users', route: '/users', icon: <AccountCircle /> },
   ]
 
-  const userItemms = [
+  const reportItems = [
+    { text: 'Lectures', route: '/reports/lecture', icon: <QueryStats /> },
+    { text: 'Subjects', route: '/reports/subject', icon: <ShowChart /> },
+    { text: 'Students', route: '/reports/student', icon: <BarChart /> },
+  ]
+
+  const userItems = [
     { text: 'Logout', icon: <Logout /> },
   ]
 
@@ -55,7 +61,12 @@ const SideDrawer = ({ drawerWidth, open, handleDrawerClose }) => {
       <Divider />
       <ListItemRender items={mainItems} />
       <Divider />
-      <ListItemRender items={userItemms} />
+      <ListItem>
+        <Typography variant='h6'>Reports</Typography>
+      </ListItem>
+      <ListItemRender items={reportItems} />
+      <Divider />
+      <ListItemRender items={userItems} />
     </Drawer>
   )
 }
