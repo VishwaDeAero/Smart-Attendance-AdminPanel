@@ -11,9 +11,13 @@ export const getAllSubjects = async () => {
   }
 };
 
-export const createSubject = async (subjectData) => {
+export const createSubject = async (subjectData, auth) => {
   try {
-    const response = await axios.post(BASE_URL, subjectData);
+    const response = await axios.post(BASE_URL, subjectData, {
+      headers: {
+        Authorization: `${auth}`
+      }
+  });
     return response.data;
   } catch (error) {
     throw error.response.data;
