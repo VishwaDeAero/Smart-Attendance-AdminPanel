@@ -1,13 +1,16 @@
 import { Visibility, VisibilityOff } from '@mui/icons-material'
-import { Button, Divider, FormControl, IconButton, InputAdornment, InputLabel, MenuItem, Select, TextField } from '@mui/material'
+import { Button, Divider, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, MenuItem, Select, TextField } from '@mui/material'
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
 import React, { useEffect, useState } from 'react'
 import { getAllRoles } from '../services/rolesService'
 import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader'
 
 const UserForm = ({ initialValues, onSubmit }) => {
+    const Joi = require('joi');
     const auth = useAuthHeader()
     const [roles, setRoles] = useState([])
+    const [errors, setErrors] = useState({})
+    const [showPassword, setShowPassword] = useState(false)
     const [formData, setFormData] = useState({
         id: null,
         name: '',
@@ -15,10 +18,9 @@ const UserForm = ({ initialValues, onSubmit }) => {
         email: '',
         roleId: '',
         password: null,
-        confirm_password: null,
+        confirmPassword: null,
     })
 
-    const [showPassword, setShowPassword] = React.useState(false)
     const handleClickShowPassword = () => setShowPassword((show) => !show)
 
     useEffect(() => {
@@ -43,12 +45,61 @@ const UserForm = ({ initialValues, onSubmit }) => {
     const handleChange = (event) => {
         const { name, value } = event.target
         setFormData((prevData) => ({ ...prevData, [name]: value }))
+
+        // Check if the error exists for the field being changed
+        if (errors[name]) {
+            // Remove the error for the field being changed
+            setErrors((prevErrors) => {
+                const { [name]: _, ...rest } = prevErrors; // Omit the error for the field being changed
+                return rest; // Return the remaining errors
+            });
+        }
     }
+
+    const validateForm = (formData) => {
+        const schema = Joi.object({
+            id: Joi.number().allow(null),
+            name: Joi.string().required(),
+            username: Joi.string().required(),
+            email: Joi.string().email({ tlds: { allow: false } }).required(),
+            roleId: Joi.number().required(),
+            password: Joi.string().required(),
+            confirmPassword: Joi.string().valid(Joi.ref('password')).required().messages({
+                'any.only': 'Passwords do not match', // Custom error message for password mismatch
+            }),
+        });
+        const { error } = schema.validate(formData, { abortEarly: false });
+        const errorsList = {};
+
+        if (error) {
+            error.details.forEach((err) => {
+                errorsList[err.context.key] = err.message;
+            });
+        }
+
+        // Set the errors state
+        setErrors(errorsList);
+
+        // Return true if there are no errors, otherwise return false
+        return Object.keys(errors).length === 0;
+    };
 
     const handleSubmit = (event) => {
         event.preventDefault()
-        // Call the onSubmit function with the form data
-        formData.id ? onSubmit(formData.id, formData, auth) : onSubmit(formData, auth)
+        // Validate Fields
+        if (validateForm(formData)) {
+            // Call the onSubmit function with the form data
+            formData.id ? onSubmit(formData.id, formData, auth) : onSubmit(formData, auth)
+            // Clear the formData state
+            setFormData({
+                name: '',
+                username: '',
+                email: '',
+                roleId: '',
+                password: null,
+                confirmPassword: null,
+            });
+        }
     }
 
     return (
@@ -63,6 +114,8 @@ const UserForm = ({ initialValues, onSubmit }) => {
                             value={formData.name}
                             onChange={handleChange}
                             variant="outlined"
+                            error={!!errors.name}
+                            helperText={errors.name}
                             required
                         />
                     </FormControl>
@@ -76,6 +129,8 @@ const UserForm = ({ initialValues, onSubmit }) => {
                             value={formData.username}
                             onChange={handleChange}
                             variant="outlined"
+                            error={!!errors.username}
+                            helperText={errors.username}
                             required
                         />
                     </FormControl>
@@ -89,6 +144,8 @@ const UserForm = ({ initialValues, onSubmit }) => {
                             value={formData.email}
                             onChange={handleChange}
                             variant="outlined"
+                            error={!!errors.email}
+                            helperText={errors.email}
                             required
                         />
                     </FormControl>
@@ -104,6 +161,7 @@ const UserForm = ({ initialValues, onSubmit }) => {
                             value={formData.roleId}
                             onChange={handleChange}
                             variant="outlined"
+                            error={!!errors.roleId}
                             required
                         >
                             <MenuItem key={0} value={0} disabled={true}>
@@ -115,6 +173,7 @@ const UserForm = ({ initialValues, onSubmit }) => {
                                 </MenuItem>
                             ))}
                         </Select>
+                        {errors.roleId && <FormHelperText>{errors.roleId}</FormHelperText>}
                     </FormControl>
                 </Grid2>
                 {initialValues == null && (
@@ -132,6 +191,8 @@ const UserForm = ({ initialValues, onSubmit }) => {
                                     // value={formData.password}
                                     onChange={handleChange}
                                     variant="outlined"
+                                    error={!!errors.password}
+                                    helperText={errors.password}
                                     InputProps={{
                                         endAdornment: (
                                             <InputAdornment position="end">
@@ -152,13 +213,15 @@ const UserForm = ({ initialValues, onSubmit }) => {
                         <Grid2 xs={12} md={6}>
                             <FormControl fullWidth>
                                 <TextField
-                                    id="confirm_password"
-                                    name="confirm_password"
+                                    id="confirmPassword"
+                                    name="confirmPassword"
                                     label="Re-Enter Password"
                                     type={showPassword ? 'text' : 'password'}
                                     // value={formData.confirm_password}
                                     onChange={handleChange}
                                     variant="outlined"
+                                    error={!!errors.confirmPassword}
+                                    helperText={errors.confirmPassword}
                                     InputProps={{
                                         endAdornment: (
                                             <InputAdornment position="end">
