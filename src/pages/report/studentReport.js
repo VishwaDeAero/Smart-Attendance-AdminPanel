@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import MainLayout from '../../components/MainLayout'
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
-import { Box, Divider, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material'
+import { Box, Button, Divider, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material'
 import moment from 'moment';
 import DataTable from '../../components/DataTable'
 import { showAlert, showLoading, closeAlert } from '../../utils/swal'
 import { getAllStudents } from '../../services/studentService';
 import { getStudentAttendance } from '../../services/reportService';
 import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
+import { DatePicker } from '@mui/x-date-pickers';
+import { Search } from '@mui/icons-material';
 
 const StudentReportView = () => {
     const auth = useAuthHeader()
@@ -31,18 +33,6 @@ const StudentReportView = () => {
             })
 
     }, [])
-
-    useEffect(() => {
-        if (formData.studentId) {
-            showLoading()
-            let attendanceData = {
-                student_id: formData.studentId,
-                start_date: formData.startDate,
-                end_date: formData.endDate,
-            }
-            fetchStudentAttendances(attendanceData)
-        }
-    }, [formData])
 
     const columns = [
         {
@@ -104,8 +94,8 @@ const StudentReportView = () => {
             </Grid2>
             <Divider sx={{ my: 3 }} />
             <Box padding={2}>
-                <Grid2 container spacing={2} marginBottom={2}>
-                    <Grid2 xs={12} md={6}>
+                <Grid2 container spacing={2}>
+                    <Grid2 xs={12} md={4}>
                         <FormControl fullWidth>
                             <InputLabel id="studentLabel">Student Name</InputLabel>
                             <Select
@@ -126,6 +116,52 @@ const StudentReportView = () => {
                                 ))}
                             </Select>
                         </FormControl>
+                    </Grid2>
+                    <Grid2 xs={12} md={4}>
+                        <FormControl fullWidth>
+                            <DatePicker
+                                id="startDate"
+                                name="startDate"
+                                label="Start Date"
+                                value={moment(formData.startDate)}
+                                onChange={(event) => { setFormData({ ...formData, startDate: event }) }}
+                                fullWidth
+                            />
+                        </FormControl>
+                    </Grid2>
+                    <Grid2 xs={12} md={4}>
+                        <FormControl fullWidth>
+                            <DatePicker
+                                id="endDate"
+                                name="endDate"
+                                label="End Date"
+                                value={moment(formData.endDate)}
+                                onChange={(event) => { setFormData({ ...formData, endDate: event }) }}
+                                fullWidth
+                            />
+                        </FormControl>
+                    </Grid2>
+                </Grid2>
+                <Grid2 container spacing={2} marginBottom={1}>
+                    <Grid2 xs={12} sx={{
+                        textAlign: 'end'
+                    }}>
+                        <Button variant="contained" endIcon={<Search />} onClick={
+                            (e) => {
+                                e.stopPropagation()
+                                if (formData.studentId) {
+                                    showLoading()
+                                    let attendanceData = {
+                                        student_id: formData.studentId,
+                                        start_date: formData.startDate,
+                                        end_date: formData.endDate,
+                                    }
+                                    fetchStudentAttendances(attendanceData)
+                                }
+                            }
+                        }>
+                            Search
+                        </Button>
                     </Grid2>
                 </Grid2>
                 <DataTable
