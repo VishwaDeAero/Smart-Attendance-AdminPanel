@@ -1,4 +1,4 @@
-import { AccountCircle, Analytics, BarChart, ChevronLeft, ChevronRight, HowToReg, Logout, People, Public, QueryStats, School, ShowChart } from '@mui/icons-material'
+import { AccountCircle, AddTask, Analytics, BarChart, ChevronLeft, ChevronRight, HowToReg, Logout, People, Public, QueryStats, School, ShowChart } from '@mui/icons-material'
 import { Divider, Drawer, IconButton, List, ListItem, Typography, styled, useTheme } from '@mui/material'
 import React from 'react'
 import AppLogo from './AppLogo'
@@ -22,6 +22,7 @@ const SideDrawer = ({ drawerWidth, open, handleDrawerClose }) => {
   const mainItems = [
     { text: 'Dashboard', route: '/', icon: <Analytics /> },
     { text: 'Students', route: '/students', icon: <People /> },
+    { text: 'Enrolments', route: '/enrolments', icon: <AddTask /> },
     { text: 'Attendance', route: '/attendance', icon: <HowToReg /> },
     { text: 'Lectures', route: '/lectures', icon: <School /> },
     { text: 'Subjects', route: '/subjects', icon: <Public /> },

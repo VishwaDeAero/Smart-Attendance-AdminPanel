@@ -14,6 +14,7 @@ import AttendanceRoute from './routes/AttendanceRoute';
 import AuthOutlet from '@auth-kit/react-router/AuthOutlet';
 import DashboardView from './pages/dashboard/dashboardView';
 import ReportRoute from './routes/ReportRoute';
+import EnrolmentRoute from './routes/EnrolmentRoute';
 
 function App() {
   return (
@@ -38,6 +39,8 @@ function App() {
             <Route path="/lectures/*" element={<LectureRoute />} />
             {/* Report Routes */}
             <Route path="/reports/*" element={<ReportRoute />} />
+            {/* Enrolment Routes */}
+            <Route path="/enrolments/*" element={<EnrolmentRoute />} />
           </Route>
           <Route path="/test" exact element={<Test />} />
           {/* 404 Page */}
