@@ -11,6 +11,7 @@ const UserForm = ({ initialValues, onSubmit }) => {
     const [roles, setRoles] = useState([])
     const [errors, setErrors] = useState({})
     const [showPassword, setShowPassword] = useState(false)
+    const [enablePasswordSection, setEnablePasswordSection] = useState(!initialValues)
     const [formData, setFormData] = useState({
         id: null,
         name: '',
@@ -28,6 +29,7 @@ const UserForm = ({ initialValues, onSubmit }) => {
         if (initialValues) {
             console.log(initialValues)
             setFormData(initialValues)
+            setEnablePasswordSection(false)
         }
     }, [initialValues])
 
@@ -41,6 +43,17 @@ const UserForm = ({ initialValues, onSubmit }) => {
                 console.error('Error fetching roles:', error);
             });
     }, []);
+
+    useEffect(() => {
+        //delete Password Values
+        if (!enablePasswordSection) {
+            setFormData((prevData) => ({
+                ...prevData,
+                password: null,
+                confirmPassword: null
+            }))
+        }
+    }, [enablePasswordSection]);
 
     const handleChange = (event) => {
         const { name, value } = event.target
@@ -63,17 +76,30 @@ const UserForm = ({ initialValues, onSubmit }) => {
             username: Joi.string().required(),
             email: Joi.string().email({ tlds: { allow: false } }).required(),
             roleId: Joi.number().required(),
-            password: Joi.string().required(),
-            confirmPassword: Joi.string().valid(Joi.ref('password')).required().messages({
-                'any.only': 'Passwords do not match', // Custom error message for password mismatch
+            password: Joi.string().when('$enablePasswordSection', {
+                is: true,
+                then: Joi.string().required(),
+                otherwise: Joi.optional().allow(null), // Do not include the field if enablePasswordSection is false
             }),
+            confirmPassword: Joi.string().when('$enablePasswordSection', {
+                is: true,
+                then: Joi.string().valid(Joi.ref('password')).required().messages({
+                    'any.only': 'Passwords do not match', // Custom error message for password mismatch
+                }),
+                otherwise: Joi.optional().allow(null), // Do not include the field if enablePasswordSection is false
+            }),
+            status: Joi.optional().allow(null),
+            createdAt: Joi.optional().allow(null),
+            updatedAt: Joi.optional().allow(null),
+            deletedAt: Joi.optional().allow(null),
         });
-        const { error } = schema.validate(formData, { abortEarly: false });
+        const { error } = schema.validate(formData, { context: { enablePasswordSection: enablePasswordSection }, abortEarly: false });
         const errorsList = {};
 
         if (error) {
             error.details.forEach((err) => {
                 errorsList[err.context.key] = err.message;
+                console.log(errorsList[err.context.key])
             });
         }
 
@@ -176,7 +202,7 @@ const UserForm = ({ initialValues, onSubmit }) => {
                         {errors.roleId && <FormHelperText>{errors.roleId}</FormHelperText>}
                     </FormControl>
                 </Grid2>
-                {initialValues == null && (
+                {enablePasswordSection && (
                     <>
                         <Grid2 xs={12}>
                             <Divider sx={{ my: 1 }} />
@@ -245,6 +271,13 @@ const UserForm = ({ initialValues, onSubmit }) => {
                     <Button type="submit" variant="contained" color="primary" sx={{ width: { sm: '100%', md: 'auto' } }}>
                         Submit
                     </Button>
+                    {initialValues && <Button type="button" variant="outlined" color="primary" onClick={
+                        () => {
+                            setEnablePasswordSection(!enablePasswordSection)
+                        }
+                    } sx={{ marginLeft: 2, width: { sm: '100%', md: 'auto' } }}>
+                        {(enablePasswordSection) ? 'Hide Password Section' : 'Change Password'}
+                    </Button>}
                 </Grid2>
             </Grid2>
         </form>

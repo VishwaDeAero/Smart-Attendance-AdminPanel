@@ -18,7 +18,7 @@ const UserCreate = () => {
         showAlert("New User Created",`New user created successfully.`, "success")
     } catch (error) {
         console.error(`Error user create:`, error)
-        showAlert("Create User Failed",error, "error")
+        showAlert("Create User Failed",error?.error, "error")
     }
 }
 

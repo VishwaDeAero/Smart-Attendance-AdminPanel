@@ -35,7 +35,7 @@ const UserUpdate = () => {
             showAlert("Update Successful",`User id:${id} updated successfully.`, "success")
         } catch (error) {
             console.error(`Error user id ${id} update:`, error)
-            showAlert("Update Failed",error, "error")
+            showAlert("Update Failed",error?.error, "error")
         }
     }
 
