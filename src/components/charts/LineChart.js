@@ -1,5 +1,4 @@
-import { Container } from '@mui/material';
-import { Chart } from 'chart.js';
+import Chart from 'chart.js/auto';
 import React, { useEffect, useRef } from 'react'
 
 const LineChart = (data) => {
