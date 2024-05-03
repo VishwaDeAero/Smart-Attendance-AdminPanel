@@ -3,10 +3,13 @@ import { Divider, Drawer, IconButton, List, ListItem, Typography, styled, useThe
 import React from 'react'
 import AppLogo from './AppLogo'
 import ListItemRender from './ListItemRender'
+import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 
 const SideDrawer = ({ drawerWidth, open, handleDrawerClose }) => {
 
   const theme = useTheme()
+  const loggedUser = useAuthUser()
+  const userRole = loggedUser? loggedUser.role.name: '';
 
   // Styles for the side drawer header component.
   const DrawerHeader = styled('div')(({ theme }) => ({
@@ -26,7 +29,8 @@ const SideDrawer = ({ drawerWidth, open, handleDrawerClose }) => {
     { text: 'Attendance', route: '/attendance', icon: <HowToReg /> },
     { text: 'Lectures', route: '/lectures', icon: <School /> },
     { text: 'Subjects', route: '/subjects', icon: <Public /> },
-    { text: 'Users', route: '/users', icon: <AccountCircle /> },
+    // Add the 'Users' object conditionally based on userRole
+    ...(userRole === 'Administrator' ? [{ text: 'Users', route: '/users', icon: <AccountCircle /> }] : []),
   ]
 
   const reportItems = [
@@ -36,7 +40,7 @@ const SideDrawer = ({ drawerWidth, open, handleDrawerClose }) => {
   ]
 
   const userItems = [
-    { text: 'Logout', icon: <Logout /> },
+    { text: 'Logout', route: '/login', icon: <Logout /> },
   ]
 
   return (
@@ -62,11 +66,11 @@ const SideDrawer = ({ drawerWidth, open, handleDrawerClose }) => {
       <Divider />
       <ListItemRender items={mainItems} />
       <Divider />
-      <ListItem>
+      {userRole == 'Administrator' && <><ListItem>
         <Typography variant='h6'>Reports</Typography>
       </ListItem>
       <ListItemRender items={reportItems} />
-      <Divider />
+      <Divider /></>}
       <ListItemRender items={userItems} />
     </Drawer>
   )
