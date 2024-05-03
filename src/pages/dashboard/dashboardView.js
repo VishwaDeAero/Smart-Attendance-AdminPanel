@@ -34,37 +34,6 @@ const DashboardView = () => {
     })
     const [analyticsData, setAnalyticsData] = useState(null)
 
-    const lectureAttendance = {
-        labels: ['ITE3332', 'ITE2432', 'ITE4333', 'ITE3322'],
-        datasetLabels: ['Present', 'Absent', 'Late'], // Labels for each dataset
-        datasets: [
-            [20, 18, 22, 0], // Attendance data
-            [3, 1, 4, 0],     // Absent data
-            [0, 1, 2, 0],  // Late data
-            // Add more datasets as needed
-        ],
-    }
-
-    const totalAttendance = {
-        labels: ['Present', 'Absent'],
-        datasetLabels: ['Attendance'], // Labels for each dataset
-        datasets: [
-            [30, 40], // Attendance data
-            // Add more datasets as needed
-        ],
-    }
-
-    const chartData1 = {
-        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-        datasetLabels: ['Attendance', 'Absent', 'Late'], // Labels for each dataset
-        datasets: [
-            [30, 40, 50, 45, 55], // Attendance data
-            [5, 10, 8, 12, 6],     // Absent data
-            [10, 15, 20, 18, 25],  // Late data
-            // Add more datasets as needed
-        ],
-    };
-
     useEffect(() => {
         showLoading()
         fetchDailyStats();
@@ -99,7 +68,7 @@ const DashboardView = () => {
                 setDailyStats({
                     attendanceMarked: attendedStudents.length,
                     attendanceAbsent: (absentStudents > 0) ? absentStudents : 0,
-                    attendancePercentage: (allStudents.length == 0) ? (attendedStudents.length / allStudents.length) * 100 : 0,
+                    attendancePercentage: (allStudents.length != 0) ? (attendedStudents.length / allStudents.length) * 100 : 0,
                     lecturesHeld: lecturesHeld.length,
                     lecturesUpcoming: (upcomingLectures > 0) ? upcomingLectures : 0,
                     totalLectures: allLectures.length,
