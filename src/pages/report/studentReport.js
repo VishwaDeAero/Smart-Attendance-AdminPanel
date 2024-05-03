@@ -124,6 +124,8 @@ const StudentReportView = () => {
                                 id="startDate"
                                 name="startDate"
                                 label="Start Date"
+                                maxDate={moment(formData.endDate)}
+                                disableFuture={true}
                                 value={moment(formData.startDate)}
                                 onChange={(event) => { setFormData({ ...formData, startDate: event }) }}
                                 fullWidth
@@ -136,6 +138,8 @@ const StudentReportView = () => {
                                 id="endDate"
                                 name="endDate"
                                 label="End Date"
+                                minDate={moment(formData.startDate)}
+                                disableFuture={true}
                                 value={moment(formData.endDate)}
                                 onChange={(event) => { setFormData({ ...formData, endDate: event }) }}
                                 fullWidth
