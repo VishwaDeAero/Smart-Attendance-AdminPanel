@@ -13,6 +13,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { loginUser } from '../services/authService'
 import { closeAlert, showAlert, showLoading } from '../utils/swal'
 import { useNavigate } from 'react-router-dom'
+import useSignOut from 'react-auth-kit/hooks/useSignOut'
+import { useEffect } from 'react'
 
 function Copyright(props) {
     return (
@@ -30,8 +32,13 @@ function Copyright(props) {
 const defaultTheme = createTheme()
 
 export default function SignIn() {
-    const signIn = useSignIn()
+    const SignIn = useSignIn()
+    const SignOut = useSignOut()
     const navigate = useNavigate();
+
+    useEffect(() => {
+        SignOut()
+    }, [])
     
     const handleSubmit = async (event) => {
         event.preventDefault()
@@ -43,7 +50,7 @@ export default function SignIn() {
         }
         await loginUser(login_info).then((res) => {
             if (res.status === "OK") {
-                if (signIn({
+                if (SignIn({
                     auth: {
                         token: res.token,
                         type: 'Bearer',
