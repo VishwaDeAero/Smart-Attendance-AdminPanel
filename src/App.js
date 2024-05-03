@@ -14,6 +14,9 @@ import DashboardView from './pages/dashboard/dashboardView';
 import ReportRoute from './routes/ReportRoute';
 import EnrolmentRoute from './routes/EnrolmentRoute';
 
+var moment = require('moment-timezone');
+moment.tz.setDefault('Etc/UTC');
+
 function App() {
   return (
     <LocalizationProvider dateAdapter={AdapterMoment}>
