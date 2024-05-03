@@ -6,6 +6,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 import { AppBar, Badge, Menu, MenuItem } from '@mui/material'
 import { AccountCircle, MoreVert, Notifications } from '@mui/icons-material'
 import useSignOut from 'react-auth-kit/hooks/useSignOut'
+import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 import { useNavigate } from 'react-router-dom'
 
 const HeaderBar = ({ drawerWidth, open, setOpen }) => {
@@ -14,6 +15,7 @@ const HeaderBar = ({ drawerWidth, open, setOpen }) => {
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null)
     const signOut = useSignOut()
     const navigate = useNavigate()
+    const loggedUser = useAuthUser()
 
     const isMenuOpen = Boolean(anchorEl)
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl)
@@ -40,6 +42,10 @@ const HeaderBar = ({ drawerWidth, open, setOpen }) => {
         navigate('/login')
     }
 
+    const handleUserProfile = () => {
+        navigate(`/users/update/${loggedUser.id}`)
+    }
+
     const handleMobileMenuOpen = (event) => {
         setMobileMoreAnchorEl(event.currentTarget)
     }
@@ -64,7 +70,7 @@ const HeaderBar = ({ drawerWidth, open, setOpen }) => {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
-            <MenuItem onClick={handleMenuClose}>My Account</MenuItem>
+            <MenuItem onClick={handleUserProfile}>My Account</MenuItem>
             <MenuItem onClick={handleSignOut}>Log Out</MenuItem>
         </Menu>
     )
