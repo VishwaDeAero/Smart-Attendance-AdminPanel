@@ -43,20 +43,14 @@ const StudentReportView = () => {
             flex: 1,
         },
         {
-            field: 'subject',
+            field: 'subjectName',
             headerName: 'Subject',
             flex: 2,
-            renderCell: (params) => (
-                <>{params.row.subject?.name}</>
-            ),
         },
         {
-            field: 'lecture',
+            field: 'lectureDate',
             headerName: 'Lecture Data & Time',
             flex: 2,
-            renderCell: (params) => (
-                <>{moment(params.row.scheduledAt).format('YYYY/MM/DD HH:mm')}</>
-            ),
         },
         {
             field: 'attendedAt',
@@ -72,7 +66,14 @@ const StudentReportView = () => {
         try {
             const attendancesData = await getStudentAttendance(attendanceData, auth)
             if (attendancesData?.data) {
-                setAttendances(attendancesData.data)
+                let structuredAttendanceData = (attendancesData.data).map((attendance) => {
+                    return {
+                        ...attendance,
+                        lectureDate: moment(attendance.scheduledAt).format('YYYY/MM/DD HH:mm'),
+                        subjectName: attendance.subject.name,
+                    }
+                })
+                setAttendances(structuredAttendanceData)
             }
         } catch (error) {
             console.error('Error fetching attendances:', error)

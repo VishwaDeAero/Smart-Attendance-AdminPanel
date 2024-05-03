@@ -56,12 +56,9 @@ const SubjectReportView = () => {
             flex: 3,
         },
         {
-            field: 'lecture',
+            field: 'lectureInfo',
             headerName: 'Lecture Date & Time',
             flex: 2,
-            renderCell: (params) => (
-                <>{params.row.lecture.location} - {moment(params.row.lecture.scheduledAt).format('YYYY/MM/DD HH:mm')}</>
-            ),
         },
         {
             field: 'attendedAt',
@@ -77,7 +74,13 @@ const SubjectReportView = () => {
         try {
             const attendancesData = await getSubjectAttendance(attendanceData, auth)
             if (attendancesData?.data) {
-                setAttendances(attendancesData.data)
+                let structuredAttendanceData = (attendancesData.data).map((attendance) => {
+                    return {
+                        ...attendance,
+                        lectureInfo: `${attendance.lecture.location} - ${moment(attendance.lecture.scheduledAt).format('YYYY/MM/DD HH:mm')}`
+                    }
+                })
+                setAttendances(structuredAttendanceData)
             }
         } catch (error) {
             console.error('Error fetching attendances:', error)
