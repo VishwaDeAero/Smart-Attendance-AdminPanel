@@ -6,9 +6,16 @@ import { getAllSubjects } from '../services/subjectService'
 const EnrolmentForm = ({ open, onClose, onSubmit, studentId, enrolledIds }) => {
     const [subjects, setSubjects] = useState([])
     const [formData, setFormData] = useState({
-        studentId,
+        studentId: studentId,
         subjectId: '',
     })
+
+    useEffect(() => {
+        setFormData({
+            ...formData,
+            studentId: studentId
+        })
+    }, [studentId])
 
     useEffect(() => {
         // Fetch subjects from API
