@@ -85,8 +85,12 @@ const AttendanceView = () => {
         showLoading()
         try {
             const attendanceData = await addAttendance(data)
-            fetchAttendances()
-            showAlert("New Attendance Marked", `Attendance marked successfully.`, "success")
+            if(attendanceData.status == 'OK'){
+                showAlert("New Attendance Marked", `Attendance marked successfully.`, "success")
+                fetchAttendances()
+            }else{
+                showAlert("Mark Attendance Failed", attendanceData.details, "error")
+            }
         } catch (error) {
             console.error(`Error attendance mark:`, error)
             showAlert("Mark Attendance Failed", error, "error")

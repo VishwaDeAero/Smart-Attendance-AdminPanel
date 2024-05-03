@@ -42,7 +42,7 @@ const AttendanceForm = ({ open, onClose, onSubmit }) => {
     const handleSubmit = (event) => {
         event.preventDefault()
         // Call the onSubmit function with the form data
-        formData.id ? onSubmit(formData.id, formData) : onSubmit(formData)
+        onSubmit(formData)
     }
 
     return (
@@ -101,6 +101,7 @@ const AttendanceForm = ({ open, onClose, onSubmit }) => {
                                     id="attendedAt"
                                     name="attendedAt"
                                     label="Date & Time"
+                                    maxDateTime={moment().hours(24).minutes(0)} //future datetimess not allowed
                                     value={moment(formData.attendedAt)}
                                     onChange={(event) => { setFormData({ ...formData, "attendedAt": event }) }}
                                     fullWidth

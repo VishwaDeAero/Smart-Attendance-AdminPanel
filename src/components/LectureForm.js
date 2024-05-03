@@ -116,7 +116,7 @@ const LectureForm = ({ initialValues, onSubmit }) => {
                             value={moment(formData.scheduledAt)}
                             error={!!errors.scheduledAt}
                             helperText={errors.scheduledAt}
-                            disablePast={true}
+                            disablePast={true} // Disable past datetimes
                             ampm={false}
                             onChange={(event) => { setFormData({ ...formData, "scheduledAt": event }) }}
                             fullWidth
