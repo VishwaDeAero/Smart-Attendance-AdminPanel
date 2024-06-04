@@ -124,26 +124,26 @@ const DashboardView = () => {
     }
 
     const getLectureChartData = () => {
-
-        const { enrolledLectureData, attendanceData } = analyticsData
-
+        const { enrolledLectureData, attendanceData } = analyticsData;
+    
         let lectureAttendance = {
             labels: [],
             datasetLabels: ['Present', 'Absent'],
             datasets: [[], []],
         };
-
+    
         // Create a map to store attendance data for each lecture
         const lectureAttendanceMap = new Map();
-
+    
         // Iterate over the enrolledLectureData to populate labels and initialize attendance map
         enrolledLectureData.forEach((lecture) => {
             const label = `${lecture.subject.code} - ${moment(lecture.scheduledAt).format('YYYY/MM/DD')}`;
             lectureAttendance.labels.push(label);
+            // Initialize attendance counts for each lecture
             lectureAttendanceMap.set(lecture.id, { attended: 0, total: lecture.enrolledStudents.length });
         });
-
-        // Iterate over attendance data to calculate attendance and absent counts for each lecture
+    
+        // Iterate over attendance data to calculate attendance counts for each lecture
         attendanceData.forEach((attendance) => {
             const lectureId = attendance.lectureId;
             if (lectureAttendanceMap.has(lectureId)) {
@@ -151,63 +151,62 @@ const DashboardView = () => {
                 attendanceInfo.attended++;
             }
         });
-
+    
         // Generate data points for each dataset
         lectureAttendanceMap.forEach((attendanceInfo) => {
             lectureAttendance.datasets[0].push(attendanceInfo.attended);
-            lectureAttendance.datasets[1].push(attendanceInfo.total - attendanceInfo.attended);
+            // Calculate absent students for each lecture
+            const absentCount = attendanceInfo.total - attendanceInfo.attended;
+            lectureAttendance.datasets[1].push(absentCount >= 0 ? absentCount : 0); // Ensure absent count is non-negative
         });
-
-        closeAlert()
+    
         return lectureAttendance;
     };
+    
 
     const getSubjectChartData = () => {
-
-        const { enrolledLectureData, attendanceData } = analyticsData
-
+        const { enrolledLectureData, attendanceData } = analyticsData;
+    
         // Initialize an empty object to store attendance and absent data for each subject
-        const attendanceMap = {};
-        const absentMap = {};
-
+        const subjectData = {};
+    
         // Iterate over each lecture in the enrolled lecture data
-        enrolledLectureData.forEach(lecture => {
+        enrolledLectureData.forEach((lecture) => {
             const subjectCode = lecture.subject.code;
-
+    
             // Initialize arrays for attendance and absent data if not already created
-            if (!attendanceMap[subjectCode]) {
-                attendanceMap[subjectCode] = [];
-                absentMap[subjectCode] = [];
+            if (!subjectData[subjectCode]) {
+                subjectData[subjectCode] = { attendance: 0, absent: 0 };
             }
-
+    
             // Find attendance data for the current lecture
-            const lectureAttendance = attendanceData.filter(attendance => attendance.lectureId === lecture.id);
-
+            const lectureAttendance = attendanceData.filter((attendance) => attendance.lectureId === lecture.id);
+    
             // Calculate attendance and absent data for the current lecture
             const totalEnrolledStudents = lecture.enrolledStudents.length;
             const attendedStudents = lectureAttendance.length;
             const absentStudents = totalEnrolledStudents - attendedStudents;
-
-            // Push the attendance and absent data to the corresponding arrays
-            attendanceMap[subjectCode].push(attendedStudents);
-            absentMap[subjectCode].push(absentStudents);
+    
+            // Aggregate attendance and absent counts for the current subject
+            subjectData[subjectCode].attendance += attendedStudents;
+            subjectData[subjectCode].absent += absentStudents;
         });
-
-        // Extract subject codes and datasets from the attendance and absent maps
-        const labels = Object.keys(attendanceMap);
-        const attendanceDatasets = Object.values(attendanceMap).flat();
-        const absentDatasets = Object.values(absentMap).flat();
-
+    
+        // Extract subject codes and datasets from the subject data object
+        const labels = Object.keys(subjectData);
+        const attendanceDatasets = labels.map((subjectCode) => subjectData[subjectCode].attendance);
+        const absentDatasets = labels.map((subjectCode) => subjectData[subjectCode].absent);
+    
         // Construct the chart data object
         const chartData = {
             labels: labels,
             datasetLabels: ['Attendance', 'Absent'],
             datasets: [attendanceDatasets, absentDatasets],
         };
-
-        closeAlert()
+    
         return chartData;
     };
+    
 
 
     return (
