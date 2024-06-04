@@ -91,7 +91,7 @@ const HeaderBar = ({ drawerWidth, open, setOpen }) => {
             open={isMobileMenuOpen}
             onClose={handleMobileMenuClose}
         >
-            <MenuItem>
+            {/* <MenuItem>
                 <IconButton
                     size="large"
                     aria-label="show 17 new notifications"
@@ -102,7 +102,7 @@ const HeaderBar = ({ drawerWidth, open, setOpen }) => {
                     </Badge>
                 </IconButton>
                 <p>Notifications</p>
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem onClick={handleProfileMenuOpen}>
                 <IconButton
                     size="large"
@@ -132,7 +132,7 @@ const HeaderBar = ({ drawerWidth, open, setOpen }) => {
                     </IconButton>
                     <Box sx={{ flexGrow: 1 }} /> {/* Add middle gap */}
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                        <IconButton
+                        {/* <IconButton
                             size="large"
                             aria-label="show 17 new notifications"
                             color="inherit"
@@ -140,7 +140,7 @@ const HeaderBar = ({ drawerWidth, open, setOpen }) => {
                             <Badge badgeContent={17} color="error">
                                 <Notifications />
                             </Badge>
-                        </IconButton>
+                        </IconButton> */}
                         <IconButton
                             size="large"
                             edge="end"
